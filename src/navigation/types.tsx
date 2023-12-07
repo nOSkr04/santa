@@ -1,5 +1,5 @@
+/* eslint-disable no-unused-vars */
 
-import { CompositeScreenProps, NavigationProp, NavigatorScreenParams } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export enum NavigationRoutes {

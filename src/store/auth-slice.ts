@@ -3,12 +3,12 @@ import { IAuth } from "../interfaces/auth";
 import { IUser } from "../interfaces/user";
 
 const initialState: IAuth = {
-  user: null,
+  user : null,
   token: null,
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name    : "auth",
   initialState,
   reducers: {
     authLogin: (state, { payload }: { payload: IAuth }) => {

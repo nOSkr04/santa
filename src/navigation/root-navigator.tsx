@@ -36,27 +36,23 @@ function RootNavigator() {
   }
   return (
     <NavigationContainer>
-    <Stack.Navigator
+      <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}>
-      {/* {user ? (
-        <>
-          <Stack.Screen component={HomeScreen} name={NavigationRoutes.HomeScreen} />
-        </>
+        {user ? (
+          <>
+            <Stack.Screen component={HomeScreen} name={NavigationRoutes.HomeScreen} />
+          </>
       ) : (
         <Stack.Group>
-        <Stack.Screen component={OnBoardScreen} name={NavigationRoutes.OnBoardScreen}  />
+          <Stack.Screen component={OnBoardScreen} name={NavigationRoutes.OnBoardScreen}  />
           <Stack.Screen component={LoginScreen} name={NavigationRoutes.LoginScreen} />
           <Stack.Screen component={SignUpScreen} name={NavigationRoutes.SignUpScreen} />
         </Stack.Group>
-      )} */}
-        {/* <Stack.Group>
-          <Stack.Screen component={LoginScreen} name={NavigationRoutes.LoginScreen} />
-          <Stack.Screen component={SignUpScreen} name={NavigationRoutes.SignUpScreen} />
-        </Stack.Group> */}
-          <Stack.Screen component={HomeScreen} name={NavigationRoutes.HomeScreen} />
-    </Stack.Navigator>
+      )}
+     
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

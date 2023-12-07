@@ -12,7 +12,7 @@ const Pagination = memo(({ data, x }: Props) => {
   return (
     <View style={styles.paginationContainer}>
       {data.map((_, index) => {
-        return <Dot index={index} x={x} key={index} />;
+        return <Dot index={index} key={index} x={x} />;
       })}
     </View>
   );
@@ -24,9 +24,9 @@ export { Pagination };
 
 const styles = StyleSheet.create({
   paginationContainer: {
-    flexDirection: "row",
-    height: 40,
+    flexDirection : "row",
+    height        : 40,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems    : "center",
   },
 });

@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState, memo } from "react";
-import { Animated, StyleSheet, Easing, Dimensions } from "react-native";
+import React, { memo, useEffect, useRef, useState } from "react";
+import { Animated, Dimensions, Easing, StyleSheet } from "react-native";
 import { Colors } from "../../constants/colors";
 
 const START_Y_POSITION = -50;
@@ -20,25 +20,25 @@ const Snowflake = memo(() => {
 
     Animated.loop(
       Animated.timing(animatedRotation, {
-        toValue: 1,
-        duration: config.rotationDuration,
+        toValue        : 1,
+        duration       : config.rotationDuration,
         useNativeDriver: true,
-        easing: Easing.linear,
+        easing         : Easing.linear,
       })
     ).start();
 
     Animated.loop(
       Animated.sequence([
         Animated.timing(animatedSideMovement, {
-          toValue: -1,
-          duration: config.sideMovementDuration,
-          easing: Easing.linear,
+          toValue        : -1,
+          duration       : config.sideMovementDuration,
+          easing         : Easing.linear,
           useNativeDriver: true,
         }),
         Animated.timing(animatedSideMovement, {
-          toValue: 1,
-          duration: config.sideMovementDuration,
-          easing: Easing.linear,
+          toValue        : 1,
+          duration       : config.sideMovementDuration,
+          easing         : Easing.linear,
           useNativeDriver: true,
         }),
       ])
@@ -47,9 +47,9 @@ const Snowflake = memo(() => {
     Animated.sequence([
       Animated.delay(config.fallDelay),
       Animated.timing(animatedY, {
-        toValue: scene.height,
-        duration: config.fallDuration,
-        easing: Easing.linear,
+        toValue        : scene.height,
+        duration       : config.fallDuration,
+        easing         : Easing.linear,
         useNativeDriver: true,
       }),
     ]).start(() => {
@@ -66,7 +66,7 @@ const Snowflake = memo(() => {
   }, [config]);
 
   const rotate = animatedRotation.interpolate({
-    inputRange: [0, 1],
+    inputRange : [0, 1],
     outputRange: config.rotationDirection
       ? ["0deg", "360deg"]
       : ["360deg", "0deg"],
@@ -74,7 +74,7 @@ const Snowflake = memo(() => {
   });
 
   const translateX = animatedSideMovement.interpolate({
-    inputRange: [-1, 1],
+    inputRange : [-1, 1],
     outputRange: [-config.sideMovementAmplitude, config.sideMovementAmplitude],
   });
 
@@ -86,24 +86,24 @@ const Snowflake = memo(() => {
           transform: [{ translateY: animatedY }, { rotate }, { translateX }],
         },
         {
-          left: config.xPosition,
+          left    : config.xPosition,
           fontSize: config.size,
-          opacity: config.opacity,
+          opacity : config.opacity,
         },
       ]}
     >
       {config.type}
     </Animated.Text>
   );
-})
+});
 
-Snowflake.displayName="Snowflake"
+Snowflake.displayName="Snowflake";
 
 export { Snowflake };
 
 const styles = StyleSheet.create({
   snowflake: {
-    color: Colors.white,
+    color   : Colors.white,
     position: "absolute",
   },
 });

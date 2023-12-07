@@ -19,7 +19,7 @@ const OnBoardScreen = memo(() => {
 
   const renderItem = useCallback(
     ({ item, index }: { item: OnboardingData; index: number }) => {
-      return <BoardCard item={item} index={index} x={x} />;
+      return <BoardCard index={index} item={item} x={x} />;
     },
     [x],
   );
@@ -43,28 +43,28 @@ const OnBoardScreen = memo(() => {
   return (
     <View style={styles.container}>
       <Animated.FlatList
-        ref={flatListRef}
-        onScroll={onScroll}
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={item => item._id}
-        scrollEventThrottle={16}
-        horizontal={true}
         bounces={false}
-        pagingEnabled={true}
-        showsHorizontalScrollIndicator={false}
+        data={data}
+        horizontal={true}
+        keyExtractor={item => item._id}
+        onScroll={onScroll}
         onViewableItemsChanged={onViewableItemsChanged}
+        pagingEnabled={true}
+        ref={flatListRef}
+        renderItem={renderItem}
+        scrollEventThrottle={16}
+        showsHorizontalScrollIndicator={false}
         viewabilityConfig={{
-          minimumViewTime: 300,
+          minimumViewTime                 : 300,
           viewAreaCoveragePercentThreshold: 10,
         }}
       />
       <View style={styles.bottomContainer}>
         <Pagination data={data} x={x} />
         <CustomButton
-          flatListRef={flatListRef}
-          flatListIndex={flatListIndex}
           dataLength={data.length}
+          flatListIndex={flatListIndex}
+          flatListRef={flatListRef}
           x={x}
         />
       </View>
@@ -78,18 +78,18 @@ export { OnBoardScreen };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex           : 1,
     backgroundColor: Colors.white,
   },
   bottomContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection   : "row",
+    justifyContent  : "space-between",
+    alignItems      : "center",
     marginHorizontal: 30,
-    paddingVertical: 30,
-    position: "absolute",
-    bottom: 20,
-    left: 0,
-    right: 0,
+    paddingVertical : 30,
+    position        : "absolute",
+    bottom          : 20,
+    left            : 0,
+    right           : 0,
   },
 });

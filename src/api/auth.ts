@@ -8,7 +8,11 @@ export const me = async () => {
   return res.data;
 };
 
-export const login = async (data: ILoginForm) => {
+export const login = async (data: {
+  phone: string,
+  password: string,
+  expoToken: string
+}) => {
   const res = await httpRequest.post("/users/login",data);
   return res;
 };

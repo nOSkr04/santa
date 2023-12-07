@@ -1,0 +1,9 @@
+eas update --branch preview --message "update"
+eas update --branch main --message "update"
+eas update --branch production --message "update"
+eas update --branch production --message "update6"
+eas update
+
+...build
+
+eas build --platform android --profile androidApk

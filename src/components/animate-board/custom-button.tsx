@@ -1,5 +1,4 @@
 import {
-  FlatList,
   StyleSheet,
   TouchableWithoutFeedback,
   useWindowDimensions,
@@ -12,10 +11,10 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { OnboardingData } from "./data";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { NavigationRoutes } from "../../navigation/types";
 import { useNavigation } from "@react-navigation/native";
+import { Colors } from "../../constants/colors";
 type Props = {
   dataLength: number;
   flatListIndex: SharedValue<number>;
@@ -40,7 +39,7 @@ const CustomButton = memo(
 
     const arrowAnimationStyle = useAnimatedStyle(() => {
       return {
-        width: 30,
+        width : 30,
         height: 30,
         opacity:
           flatListIndex.value === dataLength - 1
@@ -102,7 +101,7 @@ const CustomButton = memo(
             Get Started
           </Animated.Text>
           <Animated.View style={[styles.arrow, arrowAnimationStyle]}>
-            <AntDesign size={24} color={"black"} name="right" />
+            <AntDesign color={"black"} name="right" size={24} />
           </Animated.View>
         </Animated.View>
       </TouchableWithoutFeedback>
@@ -116,15 +115,19 @@ export { CustomButton };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#1e2169",
-    padding: 10,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "hidden",
+    backgroundColor: Colors.primary,
+    padding        : 10,
+    borderRadius   : 100,
+    justifyContent : "center",
+    alignItems     : "center",
+    overflow       : "hidden",
   },
   arrow: {
     position: "absolute",
   },
-  textButton: { color: "white", fontSize: 16, position: "absolute" },
+  textButton: {
+    color   : Colors.white,
+    fontSize: 16, 
+    position: "absolute"
+  },
 });

@@ -68,10 +68,10 @@ const BoardCard = memo(({ item, index, x }: Props) => {
       </View>
       <Animated.View style={lottieAnimationStyle}>
         <LottieView
-          source={item.animation}
-          style={styles.lottie}
           autoPlay
           loop
+          source={item.animation}
+          style={styles.lottie}
         />
       </Animated.View>
       <Text style={[styles.title, textColor()]}>{item.text}</Text>
@@ -85,30 +85,30 @@ export { BoardCard };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex          : 1,
     justifyContent: "space-around",
-    alignItems: "center",
-    marginBottom: 120,
+    alignItems    : "center",
+    marginBottom  : 120,
   },
   lottie: {
-    width: width * 0.9,
+    width : width * 0.9,
     height: width * 0.9,
   },
   title: {
-    textAlign: "center",
-    fontSize: 44,
-    fontWeight: "bold",
-    marginBottom: 10,
+    textAlign       : "center",
+    fontSize        : 44,
+    fontWeight      : "bold",
+    marginBottom    : 10,
     marginHorizontal: 20,
   },
   circleContainer: {
     ...StyleSheet.absoluteFillObject,
-    alignItems: "center",
+    alignItems    : "center",
     justifyContent: "flex-end",
   },
   circle: {
     width,
-    height: width,
+    height      : width,
     borderRadius: width / 2,
   },
 });

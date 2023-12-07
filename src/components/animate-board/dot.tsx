@@ -39,7 +39,7 @@ const Dot = ({ index, x }: Props) => {
       Extrapolate.CLAMP,
     );
     return {
-      width: widthAnimation,
+      width  : widthAnimation,
       opacity: opacityAnimation,
     };
   });
@@ -65,8 +65,8 @@ export default Dot;
 
 const styles = StyleSheet.create({
   dots: {
-    height: 10,
+    height          : 10,
     marginHorizontal: 10,
-    borderRadius: 5,
+    borderRadius    : 5,
   },
 });

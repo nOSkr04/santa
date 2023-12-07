@@ -1,7 +1,7 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { memo } from 'react'
-import { Control, Controller, FieldErrors } from 'react-hook-form';
-import { Colors } from '../../constants/colors';
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import React, { memo } from "react";
+import { Control, Controller, FieldErrors } from "react-hook-form";
+import { Colors } from "../../constants/colors";
 
 export type ILoginForm = {
   phone: string;
@@ -18,9 +18,9 @@ const LoginForm = memo(({ control, errors }: Props) => {
     <View>
       <View>
         <View style={styles.rowLabel}>
-        <Text style={styles.label}>Утас</Text>
-        {errors.phone &&
-          <Text style={styles.errorText}>{errors.phone.message}</Text>
+          <Text style={styles.label}>Утас</Text>
+          {errors.phone &&
+            <Text style={styles.errorText}>{errors.phone.message}</Text>
         }
         </View>
         <Controller
@@ -28,11 +28,11 @@ const LoginForm = memo(({ control, errors }: Props) => {
           name="phone"
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
+              keyboardType='number-pad'
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
               style={styles.input}
               value={value}
-              keyboardType='number-pad'
             />
           )}
           rules={{ required: "Заавал бөглөнө" }}
@@ -41,9 +41,9 @@ const LoginForm = memo(({ control, errors }: Props) => {
       <View style={styles.h17}  />
       <View>
         <View style={styles.rowLabel}>
-        <Text style={styles.label}>Нууц үг</Text>
-        {errors.phone &&
-          <Text style={styles.errorText}>{errors.phone.message}</Text>
+          <Text style={styles.label}>Нууц үг</Text>
+          {errors.password &&
+            <Text style={styles.errorText}>{errors.password.message}</Text>
         }
         </View>
         <Controller
@@ -53,52 +53,49 @@ const LoginForm = memo(({ control, errors }: Props) => {
             <TextInput
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
+              secureTextEntry
               style={styles.input}
               value={value}
-              secureTextEntry
             />
           )}
           rules={{ required: "Заавал бөглөнө" }}
         />
-        {errors.password &&
-          <Text style={styles.errorText}>{errors.password.message}</Text>
-        }
       </View>
     </View>
-  )
-})
+  );
+});
 
-LoginForm.displayName = "LoginForm"
+LoginForm.displayName = "LoginForm";
 
-export { LoginForm }
+export { LoginForm };
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor:Colors.white,
-    borderRadius:10,
-    marginHorizontal:26,
-    marginTop:10,
-    paddingVertical:8,
-    paddingHorizontal:8
+    backgroundColor  : Colors.white,
+    borderRadius     : 10,
+    marginHorizontal : 26,
+    marginTop        : 10,
+    paddingVertical  : 8,
+    paddingHorizontal: 8
   },
   errorText: {
-    color: Colors.danger,
-    textAlign:"right",
-    marginRight:26,
-    fontSize:12,
+    color      : Colors.danger,
+    textAlign  : "right",
+    marginRight: 26,
+    fontSize   : 12,
   },
   label: {
     fontFamily: "MonMedium",
-    fontSize: 16,
-    color: Colors.black75,
-    marginLeft:26
+    fontSize  : 16,
+    color     : Colors.black75,
+    marginLeft: 26
   },
-  h17:{
-    height:17
+  h17: {
+    height: 17
   },
-  rowLabel:{
-    flexDirection:"row",
-    alignItems:"center",
-    justifyContent:"space-between",
+  rowLabel: {
+    flexDirection : "row",
+    alignItems    : "center",
+    justifyContent: "space-between",
   }
-})
+});

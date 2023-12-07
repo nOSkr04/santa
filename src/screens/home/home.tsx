@@ -1,13 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { memo, useCallback, useState } from 'react'
+import { RefreshControl, StatusBar, StyleSheet, View } from "react-native";
+import React, { memo, useCallback, useState } from "react";
 import { Drawer } from "react-native-drawer-layout";
-import { Colors } from '../../constants/colors';
-import { DrawerContent } from '../../components/home/drawer-content';
-import { DrawerSceneWrapper } from '../../components/home/drawer-scene-wrapper';
-import AppBar from '../../components/header/app-bar';
-import { Banner } from '../../components/home/banner';
-import { GiftCard } from '../../components/home/gift';
-import { FlashList } from '@shopify/flash-list';
+import { Colors } from "../../constants/colors";
+import { DrawerContent } from "../../components/home/drawer-content";
+import { DrawerSceneWrapper } from "../../components/home/drawer-scene-wrapper";
+import AppBar from "../../components/header/app-bar";
+import { Banner } from "../../components/home/banner";
+import { GiftCard } from "../../components/home/gift";
+import { FlashList } from "@shopify/flash-list";
+import useSWRInfinite from "swr/infinite";
+import { GiftApi } from "../../api";
+import { IGift } from "../../interfaces/gift";
 const HomeScreen = memo(() => {
   const [open, setOpen] = useState(false);
   const closeDrawer = useCallback(() => {
@@ -17,72 +20,32 @@ const HomeScreen = memo(() => {
     setOpen(true);
   }, []);
 
-  const data = [
-    {
-      _id: "6563a86b67377d7e18901222",
-      name: "PlayStation 5",
-      type: "Бүтээгдэхүүн",
-      image: {
-        blurHash: "LUQvtItR-;WB%gayRjfQ_NRiIUof",
-        url: "https://techstory.in/wp-content/uploads/2022/03/ps5.png",
-        height: 150
-      },
-    },
-    {
-      _id: "6563a86b67377d7e1890122232",
-      name: "PlayStation 5",
-      type: "Бүтээгдэхүүн",
-      image: {
-        blurHash: "LUQvtItR-;WB%gayRjfQ_NRiIUof",
-        url: "https://techstory.in/wp-content/uploads/2022/03/ps5.png",
-        height: 250
-      },
-    },
-    {
-      _id: "6563a86bfsd67377d7e18901221312",
-      name: "PlayStation 5",
-      type: "Бүтээгдэхүүн",
-      image: {
-        blurHash: "LUQvtItR-;WB%gayRjfQ_NRiIUof",
-        url: "https://techstory.in/wp-content/uploads/2022/03/ps5.png",
-        height: 200
-      },
-    },
-    {
-      _id: "6563a86b67377d7e1890sdf122312",
-      name: "PlayStation 5",
-      type: "Бүтээгдэхүүн",
-      image: {
-        blurHash: "LUQvtItR-;WB%gayRjfQ_NRiIUof",
-        url: "https://techstory.in/wp-content/uploads/2022/03/ps5.png",
-        height: 180
-      },
-    },
-    {
-      _id: "6563a86b673dfso77d7e18901222",
-      name: "PlayStation 5",
-      type: "Бүтээгдэхүүн",
-      image: {
-        blurHash: "LUQvtItR-;WB%gayRjfQ_NRiIUof",
-        url: "https://techstory.in/wp-content/uploads/2022/03/ps5.png",
-        height: 300
-      },
-    },
-  ]
+  const { data, size, setSize, isLoading } = useSWRInfinite(
+    index => `swr.gifts.${index}`,
+    async (index) => {
+      const page = index.split(".").pop();
+      const res = await GiftApi.getGifts({
+        page: parseInt(`${page || 1}`, 10)
+      });
+      return res;
+    }
+
+  );
+
   const renderItem = useCallback(({ item, index }: { item: any, index: number }) => {
     const style = () => {
       return {
-        marginLeft: index % 2 !== 0 ? 5 : 12,
+        marginLeft : index % 2 !== 0 ? 5 : 12,
         marginRight: index % 2 !== 0 ? 20 : 5,
-        marginTop: 10,
+        marginTop  : 10,
       };
     };
     return (
-    <View style={style()}>
-      <GiftCard item={item} />
-    </View>
-    )
-  }, [])
+      <View style={style()}>
+        <GiftCard item={item} />
+      </View>
+    );
+  }, []);
 
   return (
     <Drawer
@@ -102,31 +65,53 @@ const HomeScreen = memo(() => {
     >
       <DrawerSceneWrapper>
         <>
+          <StatusBar backgroundColor={Colors.primary} />
           <AppBar openDrawer={openDrawer} />
           <View style={styles.container}>
-            <FlashList ListHeaderComponent={<Banner />} data={data} renderItem={renderItem} keyExtractor={item => item._id} numColumns={2} estimatedItemSize={250} />
+            <FlashList 
+            ListHeaderComponent={<Banner />}
+            data={(data || []).map(entry => entry?.data).flat() as IGift[]}
+             estimatedItemSize={250}
+              keyExtractor={item => item._id} 
+              numColumns={2} 
+              onEndReached={() => {
+                if(size < 3){
+                  return;
+                }
+                setSize(size + 1);}}
+              onEndReachedThreshold={0.8} 
+              refreshControl={
+                <RefreshControl
+                  onRefresh={() => {
+                    setSize(1);
+                  }}
+                  refreshing={isLoading}
+              />
+              }
+              renderItem={renderItem} 
+              />
           </View>
         </>
       </DrawerSceneWrapper>
     </Drawer>
-  )
-})
+  );
+});
 
-HomeScreen.displayName = "HomeScreen"
+HomeScreen.displayName = "HomeScreen";
 
-export { HomeScreen }
+export { HomeScreen };
 
 const styles = StyleSheet.create({
   overlay: {
     backgroundColor: Colors.transparent,
   },
   drawer: { backgroundColor: Colors.third },
-  root: {
-    flex: 1,
+  root  : {
+    flex           : 1,
     backgroundColor: Colors.third,
   },
   container: {
-    flex: 1,
-    backgroundColor:"#ffd1b8"
+    flex           : 1,
+    backgroundColor: Colors.background
   }
-})
+});
