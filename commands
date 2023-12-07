@@ -6,4 +6,4 @@ eas update
 
 ...build
 
-eas build --platform android --profile androidApk
+eas build --platform android --profile apk

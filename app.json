@@ -23,7 +23,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "mn.santa",
-      "versionCode": 2,
+      "versionCode": 3,
       "googleServicesFile": "./google-services.json"
     },
     "web": {
