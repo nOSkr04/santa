@@ -29,7 +29,8 @@
     "react-redux": "^9.0.2",
     "redux-persist": "^6.0.0",
     "swr": "^2.2.4",
-    "lottie-react-native": "5.1.6"
+    "lottie-react-native": "5.1.6",
+    "@shopify/flash-list": "1.4.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

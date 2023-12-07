@@ -93,7 +93,7 @@ const CustomButton = memo(
               index: flatListIndex.value + 1,
             });
           } else {
-            navigation.navigate(NavigationRoutes.HomeScreen);
+            navigation.navigate(NavigationRoutes.LoginScreen);
           }
         }}>
         <Animated.View

@@ -14,37 +14,34 @@ import { Snowflake } from './src/components/snows/snow-flake';
 export default function App() {
   const isLoadingComplete = useCachedResources();
 
-  if(!isLoadingComplete){
+  if (!isLoadingComplete) {
     return null;
   }
 
   return (
     <Provider store={store}>
-    <PersistGate persistor={persistor}>
-      <SWRConfig
-        value={SwrProviderConfig}
-      >
-        <GestureHandlerRootView style={styles.container}>
-          <SafeAreaProvider>
+      <PersistGate persistor={persistor}>
+        <SWRConfig
+          value={SwrProviderConfig}
+        >
+          <GestureHandlerRootView style={styles.container}>
+            <SafeAreaProvider>
 
-              <RootNavigator  />
+              <RootNavigator />
               <StatusBar backgroundColor="#122332" />
-              {new Array(100).fill(true).map((_, i) => (
-        <Snowflake key={i} />
-      ))}
-          </SafeAreaProvider>
-        </GestureHandlerRootView>
-      </SWRConfig>
-    </PersistGate>
-  </Provider>
+              {/* {new Array(100).fill(true).map((_, i) => (
+                <Snowflake key={i} />
+              ))} */}
+            </SafeAreaProvider>
+          </GestureHandlerRootView>
+        </SWRConfig>
+      </PersistGate>
+    </Provider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

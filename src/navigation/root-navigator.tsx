@@ -4,12 +4,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationRoutes, RootStackParamList } from "./types";
 import { useSWRToken } from "../hooks/use-swr-token";
 import { authMe } from "../store/auth-slice";
-import { AuthApi } from "../api";
+import {  UserApi } from "../api";
 import { IAuth } from "../interfaces/auth";
 import { LoginScreen } from "../screens/auth/login";
 import { SignUpScreen } from "../screens/auth/sign-up";
 import { HomeScreen } from "../screens/home/home";
 import { OnBoardScreen } from "../screens/auth/on-board";
+import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -21,7 +22,7 @@ function RootNavigator() {
   const { isInitialLoading } = useSWRToken(
     "swr.user.me",
     async () => {
-      return await AuthApi.me();
+      return await UserApi.me();
     },
     {
       onSuccess: authData => {
@@ -33,24 +34,30 @@ function RootNavigator() {
   if (isInitialLoading) {
     return null;
   }
-
   return (
+    <NavigationContainer>
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}>
-      {user ? (
+      {/* {user ? (
         <>
           <Stack.Screen component={HomeScreen} name={NavigationRoutes.HomeScreen} />
         </>
       ) : (
-        <>
+        <Stack.Group>
         <Stack.Screen component={OnBoardScreen} name={NavigationRoutes.OnBoardScreen}  />
           <Stack.Screen component={LoginScreen} name={NavigationRoutes.LoginScreen} />
           <Stack.Screen component={SignUpScreen} name={NavigationRoutes.SignUpScreen} />
-        </>
-      )}
+        </Stack.Group>
+      )} */}
+        {/* <Stack.Group>
+          <Stack.Screen component={LoginScreen} name={NavigationRoutes.LoginScreen} />
+          <Stack.Screen component={SignUpScreen} name={NavigationRoutes.SignUpScreen} />
+        </Stack.Group> */}
+          <Stack.Screen component={HomeScreen} name={NavigationRoutes.HomeScreen} />
     </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
