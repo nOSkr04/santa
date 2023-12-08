@@ -1,4 +1,4 @@
-import { RefreshControl, StatusBar, StyleSheet, View } from "react-native";
+import { RefreshControl, StatusBar, StyleSheet, Text,View } from "react-native";
 import React, { memo, useCallback, useState } from "react";
 import { Drawer } from "react-native-drawer-layout";
 import { Colors } from "../../constants/colors";
@@ -36,7 +36,7 @@ const HomeScreen = memo(() => {
     const style = () => {
       return {
         marginLeft : index % 2 !== 0 ? 5 : 12,
-        marginRight: index % 2 !== 0 ? 20 : 5,
+        marginRight: index % 2 !== 0 ? 12 : 5,
         marginTop  : 10,
       };
     };
@@ -69,7 +69,12 @@ const HomeScreen = memo(() => {
           <AppBar openDrawer={openDrawer} />
           <View style={styles.container}>
             <FlashList 
-            ListHeaderComponent={<Banner />}
+            ListHeaderComponent={
+              <>
+                <Banner />
+                <Text style={styles.title}>Өндөгнүүд</Text>
+              </>
+            }
             data={(data || []).map(entry => entry?.data).flat() as IGift[]}
              estimatedItemSize={250}
               keyExtractor={item => item._id} 
@@ -111,7 +116,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.third,
   },
   container: {
-    flex           : 1,
-    backgroundColor: Colors.background
+    flex: 1,
+  },
+  title: {
+    color     : Colors.white,
+    fontFamily: "MonBold",
+    fontSize  : 20,
+    marginLeft: 12,
+    marginTop : 10
   }
 });

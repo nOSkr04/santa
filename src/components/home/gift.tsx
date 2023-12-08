@@ -24,33 +24,39 @@ export { GiftCard };
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth    : 1,
-    borderColor    : Colors.white,
     borderRadius   : 8,
-    backgroundColor: Colors.white
-    
+    backgroundColor: Colors.white,
+    shadowColor    : Colors.black,
+    shadowOffset   : {
+      width : 0,
+      height: 2,
+    },
+    shadowOpacity : 0.25,
+    shadowRadius  : 3.84,
+    elevation     : 5,
+    justifyContent: "space-between",
+    paddingBottom : 8
   },
   image: {
-    width       : width/ 2 - 24,
+    width       : width/ 2 - 20,
     borderRadius: 8,
-    height      : 150
+    height      : width/ 2 - 20
   },
   title: {
     fontSize         : 16,
-    color            : Colors.third,
+    color            : Colors.primary,
     fontFamily       : "MonBold",
     paddingHorizontal: 5,
-    paddingTop       : 5
+    paddingTop       : 5,
   },
   type: {
     fontSize       : 12,
     backgroundColor: Colors.third,
-    alignSelf      : "flex-end",
     borderRadius   : 8,
-    marginTop      : 5,
-    marginBottom   : 5,
-    marginRight    : 5,
-    padding        : 5
+    padding        : 5,
+    position       : "absolute",
+    right          : 5,
+    top            : 5
   },
   typeText: {
     fontSize  : 12,

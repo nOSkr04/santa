@@ -45,7 +45,6 @@
       ]
     ],
     "updates": {
-      "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/10d1d125-c31c-4f9a-ac25-41590c79e2c1"
     },
     "extra": {

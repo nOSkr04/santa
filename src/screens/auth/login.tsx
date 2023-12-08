@@ -9,10 +9,13 @@ import { Image } from "expo-image";
 import { Colors } from "../../constants/colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Notifications from "expo-notifications";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationRoutes } from "../../navigation/types";
 const width = Dimensions.get("window").width;
 
 const LoginScreen = memo(() => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const sf = useSafeAreaInsets();
   const { handleSubmit, control, formState: { errors }, setError } = useForm<ILoginForm>();
 
@@ -21,7 +24,7 @@ const LoginScreen = memo(() => {
 
     const createData = {
       ...data,
-      expoToken: token,
+      expoPushToken: token,
     };
     try {
       const res = await AuthApi.login(createData);
@@ -46,6 +49,9 @@ const LoginScreen = memo(() => {
         </ScrollView>
         <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
           <Text style={styles.buttonTitle}>Нэвтрэх</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.SignUpScreen)} style={styles.button}>
+          <Text style={styles.buttonTitle}>Бүртгүүлэх</Text>
         </TouchableOpacity>
       </View>
       <Image source={require("../../assets/imgs/login-bot.png")} style={[styles.bottomImage, { bottom: sf.bottom }]} />

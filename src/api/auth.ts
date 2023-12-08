@@ -1,4 +1,3 @@
-import { ILoginForm } from "../components/auth/login-form";
 import { HttpRequest } from "../utils";
 
 const httpRequest = new HttpRequest();
@@ -11,7 +10,7 @@ export const me = async () => {
 export const login = async (data: {
   phone: string,
   password: string,
-  expoToken: string
+  expoPushToken: string
 }) => {
   const res = await httpRequest.post("/users/login",data);
   return res;
@@ -20,7 +19,11 @@ export const deleteUser = async (id: string) => {
   const res = await httpRequest.del(`/users/${id}`);
   return res;
 };
-export const signUp = async (data: {name: string, password: string}) => {
+export const signUp = async (data: {
+  phone: string,
+  password: string,
+  expoPushToken: string
+}) => {
   const res = await httpRequest.post("/users/register",data);
   return res;
 };

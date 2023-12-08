@@ -45,13 +45,9 @@ export { CountDown };
 
 const styles = StyleSheet.create({
     title: {
-        fontFamily: "MonBold",
+        fontFamily: "MonMedium",
         fontSize  : 18,
         textAlign : "center",
         color     : Colors.white,
-        position  : "absolute",
-        zIndex    : 2,
-        top       : 40,
-        left      : 44
     }
 });

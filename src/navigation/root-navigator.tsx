@@ -11,6 +11,7 @@ import { SignUpScreen } from "../screens/auth/sign-up";
 import { HomeScreen } from "../screens/home/home";
 import { OnBoardScreen } from "../screens/auth/on-board";
 import { NavigationContainer } from "@react-navigation/native";
+import { PrivacyScreen } from "../screens/privacy";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -43,6 +44,7 @@ function RootNavigator() {
         {user ? (
           <>
             <Stack.Screen component={HomeScreen} name={NavigationRoutes.HomeScreen} />
+            <Stack.Screen component={PrivacyScreen} name={NavigationRoutes.PrivacyScreen} />
           </>
       ) : (
         <Stack.Group>
