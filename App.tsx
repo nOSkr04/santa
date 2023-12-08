@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, } from "react-native";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
@@ -13,16 +13,17 @@ import { useEffect } from "react";
 import { useNotification } from "./src/hooks/use-notification";
 import * as Notifications from "expo-notifications";
 import { useUpdates } from "./src/hooks/use-update";
-
+import NetInfo from "@react-native-community/netinfo";
+import { NoNetwork } from "./src/components/home/no-network";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
+  const [isConnected, setIsConnected] = useState<boolean | null>(false);
   const { registerForPushNotificationsAsync, handleNotificationResponse } = useNotification();
   const { onFetchUpdateAsync } = useUpdates();
 
   useEffect(() => {
     registerForPushNotificationsAsync();
-    onFetchUpdateAsync();
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
         shouldPlaySound: true,
@@ -30,12 +31,27 @@ export default function App() {
         shouldSetBadge : true,
       }),
     });
-    
     const responseListener = Notifications.addNotificationResponseReceivedListener(handleNotificationResponse);
+
     return () => {
       if (responseListener) Notifications.removeNotificationSubscription(responseListener);
     };
-  }, [handleNotificationResponse, onFetchUpdateAsync, registerForPushNotificationsAsync]);
+  }, [handleNotificationResponse, registerForPushNotificationsAsync]);
+
+  useEffect(() => {
+    onFetchUpdateAsync();
+  },[onFetchUpdateAsync]);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (isConnected !== state.isConnected) {
+        setIsConnected(state.isConnected);
+      }
+    });
+    return () => {
+      unsubscribe;
+    };
+  }, [isConnected]);
 
   if (!isLoadingComplete) {
     return null;
@@ -49,6 +65,7 @@ export default function App() {
         >
           <GestureHandlerRootView style={styles.container}>
             <SafeAreaProvider>
+              {!isConnected && <NoNetwork isConnected={isConnected} />}
               <RootNavigator />
             
             </SafeAreaProvider>

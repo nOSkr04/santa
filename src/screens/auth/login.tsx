@@ -37,7 +37,7 @@ const LoginScreen = memo(() => {
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.root}>
       <Image source={require("../../assets/imgs/login-top.png")} style={[styles.topImage, { top: sf.top }]} />
       <View style={styles.content}>
-        <Text style={styles.title}>Тавтай морил1</Text>
+        <Text style={styles.title}>Тавтай морил</Text>
         <ScrollView showsVerticalScrollIndicator={false}>
           <LoginForm control={control} errors={errors} />
           {errors.root &&

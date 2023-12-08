@@ -15,7 +15,7 @@ const Banner = memo(() => {
         <Text style={styles.title}>Өндөг задрах хугацаа</Text>
         <CountDown targetDateTime={targetDateTime}    />
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonTitle}>Өндөг авах {Constants.expoConfig?.version} OTA AVAILABLE</Text>
+          <Text style={styles.buttonTitle}>Өндөг авах </Text>
         </TouchableOpacity>
       </View>
     );

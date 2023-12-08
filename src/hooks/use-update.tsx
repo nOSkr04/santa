@@ -10,7 +10,6 @@ const useUpdates = () => {
             await Updates.reloadAsync();
           }
         } catch (error) {
-          // alert(`Error fetching latest Expo update: ${error}`);
           console.log(error);
         }
       }
