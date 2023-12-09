@@ -12,6 +12,7 @@ import { HomeScreen } from "../screens/home/home";
 import { OnBoardScreen } from "../screens/auth/on-board";
 import { NavigationContainer } from "@react-navigation/native";
 import { PrivacyScreen } from "../screens/privacy";
+import { BuyEggScreen } from "../screens/home/buy-egg";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -45,6 +46,7 @@ function RootNavigator() {
           <>
             <Stack.Screen component={HomeScreen} name={NavigationRoutes.HomeScreen} />
             <Stack.Screen component={PrivacyScreen} name={NavigationRoutes.PrivacyScreen} />
+            <Stack.Screen component={BuyEggScreen} name={NavigationRoutes.BuyEggScreen} />
           </>
       ) : (
         <Stack.Group>

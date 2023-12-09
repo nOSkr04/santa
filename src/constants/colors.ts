@@ -10,4 +10,5 @@ export abstract class Colors  {
   static secondary = "#B1DF8D";
   static third = "#0F8A5F";
   static background ="#ffd1b8";
+  static border = "#cccccccc";
 }

@@ -1,23 +1,13 @@
-import { Dimensions,  ScrollView,StyleSheet, TouchableOpacity, View } from "react-native";
-import React,{ memo, useCallback,useMemo } from "react";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Dimensions,  ScrollView,StyleSheet,  View } from "react-native";
+import React,{ memo, useMemo } from "react";
 import { Colors } from "../constants/colors";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { useNavigation } from "@react-navigation/native";
-import Animated from "react-native-reanimated";
 import RenderHTML from "react-native-render-html";
+import { BackAppBar } from "../components/header/back-app-bar";
 
 const width = Dimensions.get("screen").width;
 
 const PrivacyScreen = memo(() => {
-    const sf = useSafeAreaInsets();
-    const navigaiton = useNavigation();
 
-    const top = useCallback(() => {
-        return {
-            marginTop: sf.top,
-        };
-    }, [sf.top]);
     const tagsStyles = useMemo(() => (
         {
             h1: {
@@ -37,6 +27,7 @@ const PrivacyScreen = memo(() => {
             }
         }
     ), []);
+    
     const source = {
         html: `
         <h2>Үйлчилгээний нөхцөл</h2>
@@ -78,15 +69,7 @@ const PrivacyScreen = memo(() => {
     };
     return (
       <>
-        <View style={[top(), styles.container]}>
-          <TouchableOpacity onPress={() => navigaiton.goBack()}>
-            <AntDesign color={Colors.white} name="left" size={24} />
-          </TouchableOpacity>
-          <Animated.Text sharedTransitionTag="privacyText" style={styles.title}>Үйлчилгээний нөхцөл</Animated.Text>
-          <TouchableOpacity >
-            <AntDesign color={Colors.primary} name="left" size={24} />
-          </TouchableOpacity>
-        </View>
+        <BackAppBar sharedTag="privacyText" title="Үйлчилгээний нөхцөл"  />
         <View style={styles.divider}  />
         <ScrollView showsVerticalScrollIndicator={false} style={styles.content}>
           <RenderHTML

@@ -52,7 +52,6 @@ const HomeScreen = memo(() => {
       drawerPosition="left"
       drawerStyle={styles.drawer}
       drawerType="slide"
-      hideStatusBarOnOpen={true}
       onClose={closeDrawer}
       onOpen={openDrawer}
       open={open}
@@ -60,12 +59,11 @@ const HomeScreen = memo(() => {
       renderDrawerContent={() => {
         return <DrawerContent />;
       }}
-      statusBarAnimation="fade"
       style={styles.root}
     >
       <DrawerSceneWrapper>
         <>
-          <StatusBar backgroundColor={Colors.primary} />
+          <StatusBar backgroundColor={open? Colors.third : Colors.primary} />
           <AppBar openDrawer={openDrawer} />
           <View style={styles.container}>
             <FlashList 

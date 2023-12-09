@@ -11,14 +11,14 @@ export interface OnboardingData {
 const data: OnboardingData[] = [
   {
     _id            : "1",
-    animation      : require("./animate1.json"),
+    animation      : require("./animate2.json"),
     text           : "Lorem Ipsum dolor sit amet",
     textColor      : "#005b4f",
     backgroundColor: "#ffa3ce",
   },
   {
     _id            : "2",
-    animation      : require("./animate2.json"),
+    animation      : require("./animate1.json"),
     text           : "Lorem Ipsum dolor sit amet",
     textColor      : "#1e2169",
     backgroundColor: "#bae4fd",

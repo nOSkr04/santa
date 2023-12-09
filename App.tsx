@@ -15,6 +15,7 @@ import * as Notifications from "expo-notifications";
 import { useUpdates } from "./src/hooks/use-update";
 import NetInfo from "@react-native-community/netinfo";
 import { NoNetwork } from "./src/components/home/no-network";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -64,11 +65,14 @@ export default function App() {
           value={SwrProviderConfig}
         >
           <GestureHandlerRootView style={styles.container}>
-            <SafeAreaProvider>
-              {!isConnected && <NoNetwork isConnected={isConnected} />}
-              <RootNavigator />
+            <BottomSheetModalProvider>
+
+              <SafeAreaProvider>
+                {!isConnected && <NoNetwork isConnected={isConnected} />}
+                <RootNavigator />
             
-            </SafeAreaProvider>
+              </SafeAreaProvider>
+            </BottomSheetModalProvider>
           </GestureHandlerRootView>
         </SWRConfig>
       </PersistGate>

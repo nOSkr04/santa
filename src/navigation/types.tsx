@@ -8,6 +8,7 @@ export enum NavigationRoutes {
   OnBoardScreen= "OnBoardScreen",
   HomeScreen= "HomeScreen",
   PrivacyScreen= "PrivacyScreen",
+  BuyEggScreen= "BuyEggScreen",
 
 }
 
@@ -17,6 +18,7 @@ export type RootStackParamList = {
   HomeScreen: undefined
   OnBoardScreen: undefined
   PrivacyScreen: undefined
+  BuyEggScreen: {sideBar?: boolean}
 };
 
 // export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;

@@ -98,10 +98,10 @@ const CustomButton = memo(
         <Animated.View
           style={[styles.container, buttonAnimationStyle, animatedColor]}>
           <Animated.Text style={[styles.textButton, textAnimationStyle]}>
-            Get Started
+            Эхлэх
           </Animated.Text>
           <Animated.View style={[styles.arrow, arrowAnimationStyle]}>
-            <AntDesign color={"black"} name="right" size={24} />
+            <AntDesign color={Colors.white} name="right" size={24} />
           </Animated.View>
         </Animated.View>
       </TouchableWithoutFeedback>
@@ -123,11 +123,14 @@ const styles = StyleSheet.create({
     overflow       : "hidden",
   },
   arrow: {
-    position: "absolute",
+    position      : "absolute",
+    alignItems    : "center",
+    justifyContent: "center"
   },
   textButton: {
-    color   : Colors.white,
-    fontSize: 16, 
-    position: "absolute"
+    color     : Colors.white,
+    fontSize  : 16, 
+    position  : "absolute",
+    fontFamily: "MonBold"
   },
 });

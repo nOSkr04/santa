@@ -5,20 +5,28 @@ import useSWR from "swr";
 import { IUser } from "../../interfaces/user";
 import { AuthApi, UserApi } from "../../api";
 import { Colors } from "../../constants/colors";
-import { MaterialCommunityIcons,MaterialIcons  } from "@expo/vector-icons";
+import { FontAwesome ,MaterialCommunityIcons,MaterialIcons  } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { authLogout } from "../../store/auth-slice";
 import Constants from "expo-constants";
 import Animated from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutes } from "../../navigation/types";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 const DrawerContent = memo(() => {
   const navigation = useNavigation();
+  const sf = useSafeAreaInsets();
   const dispatch = useDispatch();
   const { data } = useSWR<IUser>("swr.user.me", async() => {
     const res = await UserApi.me();
     return res;
   });
+
+  const top = useCallback(() => {
+    return {
+      marginTop: sf.top
+    };
+  },[sf.top]);
 
   const onLogout = useCallback(async() => {
     try{
@@ -30,7 +38,7 @@ const DrawerContent = memo(() => {
   },[dispatch]);
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, top()]}>
         <View>
           <View style={styles.userContainer}>
             <Image source={require("../../assets/app/logo.png")}  style={styles.avatar}  />
@@ -44,9 +52,16 @@ const DrawerContent = memo(() => {
             <MaterialIcons color={Colors.white} name="privacy-tip" size={24} />
             <Animated.Text sharedTransitionTag="privacyText" style={styles.contentTitle}>Үйлчилгээний нөхцөл</Animated.Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.content}>
+          <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.BuyEggScreen, { sideBar: true })} style={styles.content}>
             <MaterialCommunityIcons  color={Colors.white} name="egg-easter" size={24} />
-            <Text style={styles.contentTitle}>Өндөг авах</Text>
+            <Animated.Text sharedTransitionTag="addEgg2" style={styles.contentTitle}>Өндөг авах</Animated.Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.BuyEggScreen, { sideBar: true })} style={styles.content}>
+            <FontAwesome   color={Colors.white} name="lock" size={24} />
+            <View>
+              <Animated.Text  style={styles.contentTitle}>Бэлэг</Animated.Text>
+              <Animated.Text  style={styles.contentDescription}>2024.01.01 01:00</Animated.Text>
+            </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.content}>
             <MaterialCommunityIcons  color={Colors.white} name="phone" size={24} />
@@ -114,6 +129,12 @@ const styles = StyleSheet.create({
     color     : Colors.white,
     fontFamily: "MonSemiBold",
     lineHeight: 24,
+    marginLeft: 6,
+  },
+  contentDescription: {
+    fontSize  : 12,
+    color     : Colors.white,
+    fontFamily: "MonMedium",
     marginLeft: 6,
   },
   divider: {
