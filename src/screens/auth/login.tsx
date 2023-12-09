@@ -30,6 +30,7 @@ const LoginScreen = memo(() => {
       const res = await AuthApi.login(createData);
       dispatch(authLogin(res));
     } catch (err: any) {
+      console.log(err);
       if(err.statusCode === 404){
         setError("root", {
           message: "Серверт алдаа гарсан байна та түр хүлээнэ үү"
@@ -46,7 +47,7 @@ const LoginScreen = memo(() => {
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.root}>
       <Image source={require("../../assets/imgs/login-top.png")} style={[styles.topImage, { top: sf.top }]} />
       <View style={styles.content}>
-        <Text style={styles.title}>Тавтай морил1</Text>
+        <Text style={styles.title}>Тавтай морил2</Text>
         <ScrollView showsVerticalScrollIndicator={false}>
           <LoginForm control={control} errors={errors} />
           {errors.root &&
