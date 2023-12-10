@@ -2,7 +2,7 @@
   "expo": {
     "name": "santa",
     "slug": "santa",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./src/assets/app/logo.png",
     "userInterfaceStyle": "light",
@@ -15,7 +15,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "mn.santa",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
