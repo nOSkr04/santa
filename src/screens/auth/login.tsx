@@ -23,11 +23,11 @@ const LoginScreen = memo(() => {
     const token = (await Notifications.getExpoPushTokenAsync()).data;
 
     const createData = {
-      ...data,
+      phone        : data.phone,
       expoPushToken: token,
     };
     try {
-      const res = await AuthApi.login(createData);
+      const res = await AuthApi.checkLoginPhone(createData);
       dispatch(authLogin(res));
     } catch (err: any) {
       console.warn(err);

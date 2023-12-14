@@ -5,7 +5,6 @@ import { Colors } from "../../constants/colors";
 
 export type ILoginForm = {
   phone: string;
-  password: string;
 }
 
 type Props = {
@@ -31,29 +30,6 @@ const LoginForm = memo(({ control, errors }: Props) => {
               keyboardType='number-pad'
               onBlur={onBlur}
               onChangeText={(value) => onChange(value)}
-              style={styles.input}
-              value={value}
-            />
-          )}
-          rules={{ required: "Заавал бөглөнө" }}
-        />
-      </View>
-      <View style={styles.h17}  />
-      <View>
-        <View style={styles.rowLabel}>
-          <Text style={styles.label}>Нууц үг</Text>
-          {errors.password &&
-            <Text style={styles.errorText}>{errors.password.message}</Text>
-        }
-        </View>
-        <Controller
-          control={control}
-          name="password"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              onBlur={onBlur}
-              onChangeText={(value) => onChange(value)}
-              secureTextEntry
               style={styles.input}
               value={value}
             />
@@ -89,9 +65,6 @@ const styles = StyleSheet.create({
     fontSize  : 16,
     color     : Colors.black75,
     marginLeft: 26
-  },
-  h17: {
-    height: 17
   },
   rowLabel: {
     flexDirection : "row",

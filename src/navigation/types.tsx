@@ -9,12 +9,16 @@ export enum NavigationRoutes {
   HomeScreen= "HomeScreen",
   PrivacyScreen= "PrivacyScreen",
   BuyEggScreen= "BuyEggScreen",
+  PinCodeScreen= "PinCodeScreen",
+  PinCodeRegisterScreen= "PinCodeRegisterScreen",
 
 }
 
 export type RootStackParamList = {
   LoginScreen: undefined
   SignUpScreen: undefined
+  PinCodeScreen:undefined
+  PinCodeRegisterScreen:undefined
   HomeScreen: undefined
   OnBoardScreen: undefined
   PrivacyScreen: undefined

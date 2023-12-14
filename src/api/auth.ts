@@ -7,12 +7,34 @@ export const me = async () => {
   return res.data;
 };
 
-export const login = async (data: {
+export const checkLoginPhone = async (data: {
   phone: string,
-  password: string,
   expoPushToken: string
 }) => {
-  const res = await httpRequest.post("/users/login",data);
+  const res = await httpRequest.post("/users/loginCheckPhone", data);
+  return res;
+};
+export const checkLoginPassword = async (password: string) => {
+  const res = await httpRequest.post("/users/loginCheckPassword", { password });
+  return res;
+};
+export const checkRegisterPhone = async (data: {
+  phone: string,
+  expoPushToken: string
+}) => {
+  const res = await httpRequest.post("/users/registerCheckPhone", data);
+  return res;
+};
+export const checkRegisterPassword = async (password: string) => {
+  const res = await httpRequest.post("/users/registerCheckPassword", { password });
+  return res;
+};
+
+export const login = async (data: {
+  phone: string,
+  expoPushToken: string
+}) => {
+  const res = await httpRequest.post("/users/login", data);
   return res;
 };
 export const deleteUser = async (id: string) => {
@@ -21,10 +43,9 @@ export const deleteUser = async (id: string) => {
 };
 export const signUp = async (data: {
   phone: string,
-  password: string,
   expoPushToken: string
 }) => {
-  const res = await httpRequest.post("/users/register",data);
+  const res = await httpRequest.post("/users/register", data);
   return res;
 };
 

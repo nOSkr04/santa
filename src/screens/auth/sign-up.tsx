@@ -20,11 +20,11 @@ const SignUpScreen = memo(() => {
     const token = (await Notifications.getExpoPushTokenAsync()).data;
 
     const createData = {
-      ...data,
+      phone        : data.phone,
       expoPushToken: token,
     };
     try {
-      const res = await AuthApi.signUp(createData);
+      const res = await AuthApi.checkRegisterPhone(createData);
       dispatch(authLogin(res));
     } catch (err: any) {
       setError("root", {
@@ -45,7 +45,7 @@ const SignUpScreen = memo(() => {
         }
         </ScrollView>
         <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
-          <Text style={styles.buttonTitle}>Нэвтрэх</Text>
+          <Text style={styles.buttonTitle}>Бүртгүүлэх </Text>
         </TouchableOpacity>
       </View>
       <Image source={require("../../assets/imgs/login-bot.png")} style={[styles.bottomImage, { bottom: sf.bottom }]} />
