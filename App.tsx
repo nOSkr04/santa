@@ -16,6 +16,8 @@ import { useUpdates } from "./src/hooks/use-update";
 import NetInfo from "@react-native-community/netinfo";
 import { NoNetwork } from "./src/components/home/no-network";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { ToastProvider } from "react-native-toast-notifications";
+import { renderType } from "./src/components/toast/notification";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -68,8 +70,10 @@ export default function App() {
             <BottomSheetModalProvider>
 
               <SafeAreaProvider>
-                {!isConnected && <NoNetwork isConnected={isConnected} />}
-                <RootNavigator />
+                <ToastProvider renderType={renderType} >
+                  {!isConnected && <NoNetwork isConnected={isConnected} />}
+                  <RootNavigator />
+                </ToastProvider>
             
               </SafeAreaProvider>
             </BottomSheetModalProvider>

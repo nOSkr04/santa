@@ -18,6 +18,8 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { useDispatch } from "react-redux";
 import { AuthApi } from "../../api";
 import { authLogin, authLogout } from "../../store/auth-slice";
+import { useToast } from "react-native-toast-notifications";
+import { Loader } from "../../components/common/loader";
 const width = Dimensions.get("window").width;
 
 
@@ -29,97 +31,120 @@ const pinSize = pinMaxSize - pinSpacing * 2;
 const PinCodeRegisterScreen = memo(() => {
   const animation = useRef(null);
   const dispatch = useDispatch();
+  const toast = useToast();
+  const [loading, setLoading] = useState(false);
   const [code, setCode] = useState<number[]>([]);
   const onLogin = useCallback(async () => {
-    const password = code.join("");  
+    const password = code.join("");
+    setLoading(true);
     try {
       const res = await AuthApi.checkRegisterPassword(password);
-      console.log(res);
       dispatch(authLogin(res));
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      toast.show("Алдаа", {
+        type: "error",
+        data: {
+          title: err.error.message || "Алдаа",
+        },
+        duration : 2000,
+        placement: "top",
+      });
+    } finally {
+      setLoading(false);
     }
-  }, [code, dispatch]);
-
+  }, [code, dispatch, toast]);
   const onLogout = useCallback(async () => {
+    setLoading(true);
     try {
       await AuthApi.logout();
+      await AuthApi.deleteUser();
       dispatch(authLogout());
-    } catch (err) {
-      console.log(err);
+      setCode([]);
+    } catch (err: any) {
+      toast.show("Алдаа", {
+        type: "error",
+        data: {
+          title: err.error.message || "Алдаа",
+        },
+        duration : 2000,
+        placement: "top",
+      });
+    } finally {
+      setLoading(false);
     }
-  }, [dispatch]);
+  }, [dispatch, toast]);
 
-useEffect(() => {
-  if(code.length === 4){
-    onLogin();
-    setCode([]);
-    return;
-  }
-},[code.length, onLogin]);
-
+  useEffect(() => {
+    if (code.length === 4) {
+      onLogin();
+      return;
+    }
+  }, [code.length,  onLogin]);
 
 
-return (
-  <>
-    <LottieView
-      autoPlay
-      ref={animation}
-      source={require("../../assets/lottie/snow-animate.json")}
-      style={styles.root}
-    />
-    <View style={styles.appBar}>
-      <TouchableOpacity onPress={onLogout} style={styles.backButton}>
-        <AntDesign color={Colors.black} name="left" size={24} />
-      </TouchableOpacity>
-      <Text style={styles.appBarTitle}>Пин код баталгаажуулалт</Text>
-      <View style={styles.backButton}>
-        <AntDesign color={Colors.white} name="left" size={24} />
+
+  return (
+    <>
+      <LottieView
+        autoPlay
+        ref={animation}
+        source={require("../../assets/lottie/snow-animate.json")}
+        style={styles.root}
+      />
+      <View style={styles.appBar}>
+        <TouchableOpacity onPress={onLogout} style={styles.backButton}>
+          <AntDesign color={Colors.black} name="left" size={24} />
+        </TouchableOpacity>
+        <Text style={styles.appBarTitle}>Пин код баталгаажуулалт</Text>
+        <View style={styles.backButton}>
+          <AntDesign color={Colors.white} name="left" size={24} />
+        </View>
       </View>
-    </View>
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Image contentFit="contain" source={require("../../assets/app/santa1.png")} style={styles.headerImage} transition={500} />
-        <Text style={styles.headerTitle}>Santa.mn</Text>
-      </View>
-      <View style={styles.pinRoot}>
-        {[...Array(pinLength).keys()].map((i) => {
-          const isSelected = !!code[i] || code[i] === 0;
+      <View style={styles.container}>
+        {loading ? <Loader /> :
+        <View style={styles.headerContainer}>
+          <Image contentFit="contain" source={require("../../assets/app/santa1.png")} style={styles.headerImage} transition={500} />
+          <Text style={styles.headerTitle}>Santa.mn</Text>
+        </View>
+        }
+        <View style={styles.pinRoot}>
+          {[...Array(pinLength).keys()].map((i) => {
+            const isSelected = !!code[i] || code[i] === 0;
 
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          const aniamtedStyle = useAnimatedStyle(() => {
-            return {
-              height: isSelected
-                ? withTiming(pinSize, {
-                  duration: 100,
-                })
-                : withTiming(2, {
-                  duration: 100,
-                }),
-              marginBottom: isSelected
-                ? withTiming(pinSize / 2, {
-                  duration: 100,
-                })
-                : withTiming(0, {
-                  duration: 100,
-                }),
-              width       : pinSize,
-              borderRadius: pinSize,
-            };
-          });
-          return (
-            <Animated.Image
-              key={`pin-${i}`}
-              source={require("../../assets/gift.png")}
-              style={aniamtedStyle}
-            />
-          );
-        })}
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const aniamtedStyle = useAnimatedStyle(() => {
+              return {
+                height: isSelected
+                  ? withTiming(pinSize, {
+                    duration: 100,
+                  })
+                  : withTiming(2, {
+                    duration: 100,
+                  }),
+                marginBottom: isSelected
+                  ? withTiming(pinSize / 2, {
+                    duration: 100,
+                  })
+                  : withTiming(0, {
+                    duration: 100,
+                  }),
+                width       : pinSize,
+                borderRadius: pinSize,
+              };
+            });
+            return (
+              <Animated.Image
+                key={`pin-${i}`}
+                source={require("../../assets/gift.png")}
+                style={aniamtedStyle}
+              />
+            );
+          })}
+        </View>
+        <DialPad code={code} setCode={setCode} />
       </View>
-      <DialPad code={code} setCode={setCode} />
-    </View>
-  </>
-);
+    </>
+  );
 });
 
 PinCodeRegisterScreen.displayName = "PinCodeRegisterScreen";

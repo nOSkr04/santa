@@ -23,6 +23,8 @@ function RootNavigator() {
 
   const { user } = useSelector((state: { auth: IAuth }) => state.auth);
 
+  console.log(user, "user");
+
   const { isInitialLoading,  } = useSWRToken(
     "swr.user.me",
     async () => {
@@ -34,6 +36,7 @@ function RootNavigator() {
       },
     },
   );
+
 
   const checkUser = () => {
     if(user?.type ==="CHECK_PHONE_LOGIN"){

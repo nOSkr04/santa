@@ -2,10 +2,11 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 import React, { memo,  } from "react";
 import { Image } from "expo-image";
 import { Colors } from "../../constants/colors";
+import { IGift } from "../../interfaces/gift";
 
 const width = Dimensions.get("window").width;
 
-const GiftCard = memo(({ item }: { item: any }) => {
+const GiftCard = memo(({ item }: { item: IGift }) => {
 
   return (
     <View style={styles.container}>

@@ -11,6 +11,7 @@ import { FlashList } from "@shopify/flash-list";
 import useSWRInfinite from "swr/infinite";
 import { GiftApi } from "../../api";
 import { IGift } from "../../interfaces/gift";
+import { Loader } from "../../components/common/loader";
 const HomeScreen = memo(() => {
   const [open, setOpen] = useState(false);
   const closeDrawer = useCallback(() => {
@@ -67,22 +68,25 @@ const HomeScreen = memo(() => {
           <AppBar openDrawer={openDrawer} />
           <View style={styles.container}>
             <FlashList 
+            ListEmptyComponent={<View style={styles.loader}>
+              <Loader    />
+            </View>}
             ListHeaderComponent={
               <>
                 <Banner />
                 <Text style={styles.title}>Өндөгнүүд</Text>
               </>
             }
-            data={(data || []).map(entry => entry?.data).flat() as IGift[]}
-             estimatedItemSize={250}
+             data={(data || []).map(entry => entry?.data).flat() as IGift[]}
+              estimatedItemSize={250} 
               keyExtractor={item => item._id} 
-              numColumns={2} 
+              numColumns={2}
               onEndReached={() => {
                 if(size < 3){
                   return;
                 }
-                setSize(size + 1);}}
-              onEndReachedThreshold={0.8} 
+                setSize(size + 1);}} 
+              onEndReachedThreshold={0.8}
               refreshControl={
                 <RefreshControl
                   onRefresh={() => {
@@ -90,8 +94,8 @@ const HomeScreen = memo(() => {
                   }}
                   refreshing={isLoading}
               />
-              }
-              renderItem={renderItem} 
+              } 
+              renderItem={renderItem}
               />
           </View>
         </>
@@ -122,5 +126,11 @@ const styles = StyleSheet.create({
     fontSize  : 20,
     marginLeft: 12,
     marginTop : 10
+  },
+  loader: {
+    flex           : 1,
+    backgroundColor: Colors.primary,
+    alignItems     : "center",
+    justifyContent : "center"
   }
 });

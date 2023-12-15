@@ -8,19 +8,28 @@ export class Gift implements IGift {
     blurHash: string;
   };
   type: string;
+  productType: string;
   createdAt:string;
+  quantity: string;
+  isRandom: boolean;
   constructor({
     _id,
     image,
     name,
     type,
-    createdAt
+    createdAt,
+    productType,
+    quantity,
+    isRandom
   }: IGift) {
     this._id = _id;
     this.image = image;
     this.name = name;
     this.type = type;
     this.createdAt= createdAt;
+    this.productType= productType;
+    this.quantity= quantity;
+    this.isRandom= isRandom;
   
   }
 

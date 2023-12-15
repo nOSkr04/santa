@@ -37,8 +37,8 @@ export const login = async (data: {
   const res = await httpRequest.post("/users/login", data);
   return res;
 };
-export const deleteUser = async (id: string) => {
-  const res = await httpRequest.del(`/users/${id}`);
+export const deleteUser = async () => {
+  const res = await httpRequest.del("/users/delete");
   return res;
 };
 export const signUp = async (data: {
@@ -53,4 +53,5 @@ export const logout = async () => {
   const res = await httpRequest.get("/users/logout");
   return res;
 };
+
 
