@@ -4,10 +4,10 @@
     "slug": "santa",
     "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./src/assets/app/logo.png",
+    "icon": "./src/assets/mobile/ios.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/assets/app/logo.png",
+      "image": "./src/assets/mobile/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#d62c2c"
     },
@@ -17,11 +17,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "mn.santa",
-      "buildNumber": "2"
+      "buildNumber": "2",
+      "icon": "./src/assets/mobile/ios.png"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/app/logo.png",
+        "foregroundImage": "./src/assets/mobile/android.png",
         "backgroundColor": "#ffffff"
       },
       "package": "mn.santa",
@@ -41,8 +42,11 @@
       [
         "expo-notifications",
         {
-          "icon": "./src/assets/app/notif.png",
-          "color": "#d62c2c"
+          "icon": "./src/assets/mobile/notification.png",
+          "color": "#d62c2c",
+          "sounds": [
+            "./src/assets/mobile/notification.wav"
+          ]
         }
       ]
     ],

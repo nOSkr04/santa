@@ -74,7 +74,13 @@ const BoardCard = memo(({ item, index, x }: Props) => {
           style={styles.lottie}
         />
       </Animated.View>
-      <Text style={[styles.title, textColor()]}>{item.text}</Text>
+      <View>
+        <Text style={[styles.title, textColor()]}>{item.text}</Text>
+        {item.description && 
+          <Text style={[styles.title, textColor()]}>{item.description}</Text>
+      }
+      </View>
+      
     </View>
   );
 });
@@ -96,7 +102,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign       : "center",
-    fontSize        : 44,
+    fontSize        : 30,
     fontWeight      : "bold",
     marginBottom    : 10,
     marginHorizontal: 20,
