@@ -84,7 +84,7 @@ return (
       </View>
       <View style={styles.pinRoot}>
         {[...Array(pinLength).keys()].map((i) => {
-          const isSelected = !!code[i];
+          const isSelected = !!code[i] || code[i] === 0;
 
           // eslint-disable-next-line react-hooks/rules-of-hooks
           const aniamtedStyle = useAnimatedStyle(() => {
