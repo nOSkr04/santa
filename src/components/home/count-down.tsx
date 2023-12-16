@@ -35,7 +35,7 @@ const CountDown = memo(({ targetDateTime }: {targetDateTime: Date}) => {
       const { days, hours, minutes, seconds } = timeRemaining;
     
       return (
-        <Text style={styles.title}>{`${days} өдөр ${hours} цаг ${minutes} мин ${seconds}с`}</Text>
+        <Text style={styles.title}>{`${days} өдөр ${hours} цаг ${minutes} мин ${seconds} сек`}</Text>
       );
   });
 
@@ -45,9 +45,18 @@ export { CountDown };
 
 const styles = StyleSheet.create({
     title: {
-        fontFamily: "MonMedium",
-        fontSize  : 18,
-        textAlign : "center",
-        color     : Colors.white,
+        fontFamily  : "MonMedium",
+        fontSize    : 18,
+        textAlign   : "center",
+        color       : Colors.white,
+        shadowColor : Colors.white,
+        shadowOffset: {
+          width : 0,
+          height: 12,
+        },
+        shadowOpacity: 0.58,
+        shadowRadius : 16.00,
+    
+        elevation: 24,
     }
 });

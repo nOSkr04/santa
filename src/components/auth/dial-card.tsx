@@ -54,11 +54,11 @@ export { DialCard };
 
 const styles = StyleSheet.create({
   container: {
-    width: dialPadSize,
-    height: dialPadSize,
-    borderRadius: dialPadSize,
-    borderColor: Colors.black,
-    alignItems: "center",
+    width         : dialPadSize,
+    height        : dialPadSize,
+    borderRadius  : dialPadSize,
+    borderColor   : Colors.black,
+    alignItems    : "center",
     justifyContent: "center",
   },
   textStyle: {

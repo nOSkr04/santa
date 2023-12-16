@@ -7,6 +7,7 @@ export class User implements IUser {
   eggCount: string;
   version: string;
   type: string;
+  notificationCount:number;
 
   constructor({
     _id,
@@ -14,7 +15,8 @@ export class User implements IUser {
     role,
     eggCount,
     version,
-    type
+    type,
+    notificationCount
   }: IUser) {
     this._id = _id;
     this.phone = phone;
@@ -22,6 +24,7 @@ export class User implements IUser {
     this.eggCount = eggCount;
     this.version = version;
     this.type = type;
+    this.notificationCount = notificationCount;
   }
 
   static fromJson(json: IUser) {

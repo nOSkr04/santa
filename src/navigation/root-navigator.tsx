@@ -15,6 +15,9 @@ import { PrivacyScreen } from "../screens/privacy";
 import { BuyEggScreen } from "../screens/home/buy-egg";
 import { PinCodeScreen } from "../screens/auth/pin-code";
 import { PinCodeRegisterScreen } from "../screens/auth/pin-code-register";
+import { NotificationScreen } from "../screens/home/notification";
+import { GiftEggScreen } from "../screens/home/gift-egg";
+import { GiftEggBuyScreen } from "../screens/home/gift-egg-buy";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,9 +26,8 @@ function RootNavigator() {
 
   const { user } = useSelector((state: { auth: IAuth }) => state.auth);
 
-  console.log(user, "user");
 
-  const { isInitialLoading,  } = useSWRToken(
+  const { isInitialLoading, } = useSWRToken(
     "swr.user.me",
     async () => {
       return await UserApi.me();
@@ -39,16 +41,16 @@ function RootNavigator() {
 
 
   const checkUser = () => {
-    if(user?.type ==="CHECK_PHONE_LOGIN"){
-       return(
-         <Stack.Screen component={PinCodeScreen} name={NavigationRoutes.PinCodeScreen} />
-       );
+    if (user?.type === "CHECK_PHONE_LOGIN") {
+      return (
+        <Stack.Screen component={PinCodeScreen} name={NavigationRoutes.PinCodeScreen}  />
+      );
     }
-   if(user?.type ==="CHECK_PHONE_REGISTER"){
-    return(
-      <Stack.Screen component={PinCodeRegisterScreen} name={NavigationRoutes.PinCodeRegisterScreen} />
-    );
-   }
+    if (user?.type === "CHECK_PHONE_REGISTER") {
+      return (
+        <Stack.Screen component={PinCodeRegisterScreen} name={NavigationRoutes.PinCodeRegisterScreen}  />
+      );
+    }
   };
 
   if (isInitialLoading) {
@@ -64,17 +66,19 @@ function RootNavigator() {
           <>
             {checkUser()}
             <Stack.Screen component={HomeScreen} name={NavigationRoutes.HomeScreen} />
-            <Stack.Screen component={PrivacyScreen} name={NavigationRoutes.PrivacyScreen} />
             <Stack.Screen component={BuyEggScreen} name={NavigationRoutes.BuyEggScreen} />
+            <Stack.Screen component={GiftEggScreen} name={NavigationRoutes.GiftEggScreen} />
+            <Stack.Screen component={GiftEggBuyScreen} name={NavigationRoutes.GiftEggBuyScreen} />
+            <Stack.Screen component={NotificationScreen} name={NavigationRoutes.NotificationScreen} />
           </>
         ) : (
           <Stack.Group>
-            <Stack.Screen component={OnBoardScreen} name={NavigationRoutes.OnBoardScreen} />
+            {/* <Stack.Screen component={OnBoardScreen} name={NavigationRoutes.OnBoardScreen} /> */}
             <Stack.Screen component={LoginScreen} name={NavigationRoutes.LoginScreen} />
             <Stack.Screen component={SignUpScreen} name={NavigationRoutes.SignUpScreen} />
           </Stack.Group>
         )}
-
+        <Stack.Screen component={PrivacyScreen} name={NavigationRoutes.PrivacyScreen} />
 
       </Stack.Navigator>
     </NavigationContainer>

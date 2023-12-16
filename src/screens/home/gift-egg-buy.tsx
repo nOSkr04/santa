@@ -11,14 +11,11 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { QpaySheet } from "../../components/sheet/qpay-sheet";
 import { SheetBackdrop } from "../../components/sheet/back-drop";
 import { useNavigation } from "@react-navigation/native";
-import { NavigationRoutes, RootStackParamList } from "../../navigation/types";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import LottieView from "lottie-react-native";
 const width = Dimensions.get("window").width;
 
-type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.BuyEggScreen>;
 
-const BuyEggScreen = memo(({ route }: Props) => {
+const GiftEggBuyScreen = memo(() => {
   const animate = useRef(null);
   const { data } = useSWR<IUser>("swr.user.me");
   const navigation = useNavigation();
@@ -70,7 +67,7 @@ const BuyEggScreen = memo(({ route }: Props) => {
 
   return (
     <>
-      <BackAppBar sharedTag={route.params?.sideBar ? "addEgg2" : "addEgg"} title="Өндөг авах" />
+      <BackAppBar sharedTag={"giftEggBuy"} title="Өндөг авах" />
       <View style={styles.divider} />
 
       {loading ?
@@ -79,14 +76,14 @@ const BuyEggScreen = memo(({ route }: Props) => {
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.root}>
           <ScrollView contentContainerStyle={styles.container}>
             <LottieView
-        autoPlay
-        ref={animate}
-        source={require("../../assets/lottie/snow-animate.json")}
-        style={styles.root}
-      />
+              autoPlay
+              ref={animate}
+              source={require("../../assets/lottie/snow-animate.json")}
+              style={styles.root}
+            />
 
             <View style={styles.shadowImage}>
-              <Image contentFit="contain" source={require("../../assets/img/egg.png")} style={styles.image} />
+              <Image contentFit="contain" source={require("../../assets/img/gift.png")} style={styles.image} />
             </View>
             <View style={styles.contentContainer}>
               <Text style={styles.eggTitle}>{egg} өндөг = {(intEgg * 20000 || 0).toLocaleString()} ₮</Text>
@@ -110,18 +107,18 @@ const BuyEggScreen = memo(({ route }: Props) => {
 
               </View>
               <View style={styles.buttonRow}>
-                <TouchableOpacity onPress={() => setEgg("1")} style={styles.rowButton}>
-                  <Text style={styles.rowButtonTitle}>1 ширхэг</Text>
+                <TouchableOpacity onPress={() => setEgg("7")} style={styles.rowButton}>
+                  <Text style={styles.rowButtonTitle}>7 ширхэг</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setEgg("3")} style={styles.rowButton}>
-                  <Text style={styles.rowButtonTitle}>3 ширхэг</Text>
+                <TouchableOpacity onPress={() => setEgg("27")} style={styles.rowButton}>
+                  <Text style={styles.rowButtonTitle}>27 ширхэг</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setEgg("5")} style={styles.rowButton}>
-                  <Text style={styles.rowButtonTitle}>5 ширхэг</Text>
+                <TouchableOpacity onPress={() => setEgg("247")} style={styles.rowButton}>
+                  <Text style={styles.rowButtonTitle}>247 ширхэг</Text>
                 </TouchableOpacity>
               </View>
               <TouchableOpacity onPress={onPress} style={styles.submit}>
-                <Text style={styles.primaryButton}>Авах</Text>
+                <Text style={styles.primaryButton}>Илгээх</Text>
               </TouchableOpacity>
               <View style={styles.h32} />
 
@@ -149,9 +146,9 @@ const BuyEggScreen = memo(({ route }: Props) => {
   );
 });
 
-BuyEggScreen.displayName = "BuyEggScreen";
+GiftEggBuyScreen.displayName = "GiftEggBuyScreen";
 
-export { BuyEggScreen };
+export { GiftEggBuyScreen };
 
 const styles = StyleSheet.create({
   root: {

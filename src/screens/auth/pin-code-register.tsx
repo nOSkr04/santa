@@ -4,14 +4,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect,  useState } from "react";
 import Animated, {
   useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
   withTiming,
 } from "react-native-reanimated";
 import { Colors } from "../../constants/colors";
 import { DialPad } from "../../components/auth/dial-pad";
-import LottieView from "lottie-react-native";
 import { Image } from "expo-image";
 import { Text } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -19,28 +20,32 @@ import { useDispatch } from "react-redux";
 import { AuthApi } from "../../api";
 import { authLogin, authLogout } from "../../store/auth-slice";
 import { useToast } from "react-native-toast-notifications";
-import { Loader } from "../../components/common/loader";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 const width = Dimensions.get("window").width;
 
+const AnimatedImage = Animated.createAnimatedComponent(Image);
 
 export const pinLength = 4;
+const duration = 500;
 const pinContainerSize = width / 2;
 const pinMaxSize = pinContainerSize / pinLength;
 const pinSpacing = 10;
 const pinSize = pinMaxSize - pinSpacing * 2;
 const PinCodeRegisterScreen = memo(() => {
-  const animation = useRef(null);
   const dispatch = useDispatch();
+  const sv = useSharedValue(0);
+  const sf=  useSafeAreaInsets();
   const toast = useToast();
-  const [loading, setLoading] = useState(false);
   const [code, setCode] = useState<number[]>([]);
   const onLogin = useCallback(async () => {
+    sv.value = withRepeat(withTiming(1, { duration }), -1);
     const password = code.join("");
-    setLoading(true);
     try {
       const res = await AuthApi.checkRegisterPassword(password);
       dispatch(authLogin(res));
     } catch (err: any) {
+      sv.value = 0;
+      setCode([]);
       toast.show("Алдаа", {
         type: "error",
         data: {
@@ -49,12 +54,10 @@ const PinCodeRegisterScreen = memo(() => {
         duration : 2000,
         placement: "top",
       });
-    } finally {
-      setLoading(false);
     }
-  }, [code, dispatch, toast]);
+  }, [code, dispatch, sv, toast]);
   const onLogout = useCallback(async () => {
-    setLoading(true);
+    sv.value = withRepeat(withTiming(1, { duration }), -1);
     try {
       await AuthApi.logout();
       await AuthApi.deleteUser();
@@ -69,10 +72,10 @@ const PinCodeRegisterScreen = memo(() => {
         duration : 2000,
         placement: "top",
       });
-    } finally {
-      setLoading(false);
+      sv.value = 0;
     }
-  }, [dispatch, toast]);
+    setCode([]);
+  }, [dispatch, sv, toast]);
 
   useEffect(() => {
     if (code.length === 4) {
@@ -81,32 +84,32 @@ const PinCodeRegisterScreen = memo(() => {
     }
   }, [code.length,  onLogin]);
 
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${sv.value * 360}deg` }],
+  }));
 
+  const safeTop = useCallback(() => {
+    return{
+      marginTop: sf.top+ 10
+    };
+  },[sf.top]);
 
   return (
     <>
-      <LottieView
-        autoPlay
-        ref={animation}
-        source={require("../../assets/lottie/snow-animate.json")}
-        style={styles.root}
-      />
-      <View style={styles.appBar}>
+      <View style={[styles.appBar, safeTop()]}>
         <TouchableOpacity onPress={onLogout} style={styles.backButton}>
           <AntDesign color={Colors.black} name="left" size={24} />
         </TouchableOpacity>
-        <Text style={styles.appBarTitle}>Пин код баталгаажуулалт</Text>
+        <Text style={styles.appBarTitle}>Пин код үүсгэх</Text>
         <View style={styles.backButton}>
           <AntDesign color={Colors.white} name="left" size={24} />
         </View>
       </View>
       <View style={styles.container}>
-        {loading ? <Loader /> :
         <View style={styles.headerContainer}>
-          <Image contentFit="contain" source={require("../../assets/app/santa1.png")} style={styles.headerImage} transition={500} />
+          <AnimatedImage contentFit="contain" source={require("../../assets/app/santa1.png")} style={[styles.headerImage, animatedStyle]} transition={500} />
           <Text style={styles.headerTitle}>Santa.mn</Text>
         </View>
-        }
         <View style={styles.pinRoot}>
           {[...Array(pinLength).keys()].map((i) => {
             const isSelected = !!code[i] || code[i] === 0;
@@ -202,7 +205,6 @@ const styles = StyleSheet.create({
     zIndex          : 2,
     position        : "absolute",
     left            : 0,
-    top             : 50,
     right           : 0,
   },
   appBarTitle: {

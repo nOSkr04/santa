@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, } from "react-native";
 import React, { memo,  } from "react";
 import { DialCard } from "./dial-card";
 

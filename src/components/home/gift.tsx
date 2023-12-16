@@ -27,16 +27,25 @@ const styles = StyleSheet.create({
   container: {
     borderRadius   : 8,
     backgroundColor: Colors.white,
+    // shadowColor    : Colors.black,
+    // shadowOffset   : {
+    //   width : 0,
+    //   height: 2,
+    // },
+    // shadowOpacity : 0.25,
+    // shadowRadius  : 3.84,
+    // elevation     : 5,
+    justifyContent : "space-between",
+    paddingBottom  : 8,
     shadowColor    : Colors.black,
     shadowOffset   : {
       width : 0,
-      height: 2,
+      height: 12,
     },
-    shadowOpacity : 0.25,
-    shadowRadius  : 3.84,
-    elevation     : 5,
-    justifyContent: "space-between",
-    paddingBottom : 8
+    shadowOpacity: 0.58,
+    shadowRadius : 16.00,
+    
+    elevation: 24,
   },
   image: {
     width       : width/ 2 - 20,
@@ -45,14 +54,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize         : 16,
-    color            : Colors.primary,
+    color            : Colors.black,
     fontFamily       : "MonBold",
     paddingHorizontal: 5,
     paddingTop       : 5,
   },
   type: {
     fontSize       : 12,
-    backgroundColor: Colors.third,
+    backgroundColor: Colors.primary,
     borderRadius   : 8,
     padding        : 5,
     position       : "absolute",

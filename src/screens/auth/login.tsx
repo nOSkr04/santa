@@ -1,25 +1,22 @@
-import { Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { memo,  } from "react";
-import { ILoginForm, LoginForm } from "../../components/auth/login-form";
+import { Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, } from "react-native";
+import React, { memo, useState } from "react";
+import { authLogin } from "../../store/auth-slice";
+import { AuthApi } from "../../api";
+import * as Notifications from "expo-notifications";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { AuthApi } from "../../api";
-import { authLogin } from "../../store/auth-slice";
+import { ILoginForm, LoginForm } from "../../components/auth/login-form";
 import { Image } from "expo-image";
-import { Colors } from "../../constants/colors";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as Notifications from "expo-notifications";
-import { useNavigation } from "@react-navigation/native";
-import { NavigationRoutes } from "../../navigation/types";
-const width = Dimensions.get("window").width;
+
+const { width, height } = Dimensions.get("window");
 
 const LoginScreen = memo(() => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const sf = useSafeAreaInsets();
+  const [loading, setLoading] = useState(false);
   const { handleSubmit, control, formState: { errors }, setError } = useForm<ILoginForm>();
 
   const onSubmit = async (data: ILoginForm) => {
+    setLoading(true);
     const token = (await Notifications.getExpoPushTokenAsync()).data;
 
     const createData = {
@@ -30,38 +27,26 @@ const LoginScreen = memo(() => {
       const res = await AuthApi.checkLoginPhone(createData);
       dispatch(authLogin(res));
     } catch (err: any) {
-      console.warn(err);
-      if(err.statusCode === 404){
+      if (err.statusCode === 404) {
         setError("root", {
           message: "Серверт алдаа гарсан байна та түр хүлээнэ үү"
         });
         return;
       }
-      setError("root", {
+      setError("phone", {
         message: err.error.message
       });
+    } finally {
+      setLoading(false);
     }
   };
-
   return (
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.root}>
-      <Image source={require("../../assets/imgs/login-top.png")} style={[styles.topImage, { top: sf.top }]} />
-      <View style={styles.content}>
-        <Text style={styles.title}>Тавтай морил</Text>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <LoginForm control={control} errors={errors} />
-          {errors.root &&
-            <Text style={styles.errorText}>{errors.root.message}</Text>
-        }
-        </ScrollView>
-        <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.button}>
-          <Text style={styles.buttonTitle}>Нэвтрэх</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.SignUpScreen)} style={styles.button}>
-          <Text style={styles.buttonTitle}>Бүртгүүлэх</Text>
-        </TouchableOpacity>
-      </View>
-      <Image source={require("../../assets/imgs/login-bot.png")} style={[styles.bottomImage, { bottom: sf.bottom }]} />
+      <Image contentFit="cover" placeholder={"L93KNit:L#MIXUbIjEj[L}Vqt.tl"} source={"https://evseg.s3.ap-southeast-1.amazonaws.com/97c18868-7e22-40ba-97f7-7340afedf26e.jpg"} style={styles.bgImage} />
+      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+        <Image contentFit="cover" source={require("../../assets/img/login-bg.png")} style={styles.snowman} />
+        <LoginForm control={control} errors={errors} loading={loading} onSubmit={handleSubmit(onSubmit)} />
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 });
@@ -72,60 +57,27 @@ export { LoginScreen };
 
 const styles = StyleSheet.create({
   root: {
-    flex           : 1,
-    backgroundColor: Colors.secondary,
-    justifyContent : "center",
-
+    flex: 1,
   },
-  images: {
+  bgImage: {
+    pointerEvents: "none",
     width,
-    height: 200
+    height       : height + 150,
+    position     : "absolute",
+    top          : 0,
+    left         : 0,
+    right        : 0,
+    bottom       : 0
   },
-  content: {
-    backgroundColor : Colors.white40,
-    marginHorizontal: 28,
-    borderRadius    : 31,
-    zIndex          : 3
+  container: {
+    flex          : 1,
+    alignItems    : "center",
+    justifyContent: "center"
   },
-  title: {
-    marginLeft  : 26,
-    marginTop   : 75,
-    fontFamily  : "MonBold",
-    fontSize    : 24,
-    marginBottom: 26
-  },
-  button: {
-    marginTop       : 46,
-    marginBottom    : 75,
-    alignItems      : "center",
-    justifyContent  : "center",
-    backgroundColor : Colors.primary,
-    marginHorizontal: 26,
-    borderRadius    : 10
-  },
-  buttonTitle: {
-    fontFamily     : "MonBold",
-    fontSize       : 15,
-    color          : Colors.white,
-    paddingVertical: 13
-  },
-  topImage: {
-    left    : 0,
-    width   : 160,
-    height  : 240,
-    position: "absolute",
-  },
-  bottomImage: {
-    right   : 0,
-    width   : 200,
-    height  : 250,
-    position: "absolute",
-    zIndex  : 2
-  },
-  errorText: {
-    color      : Colors.danger,
-    textAlign  : "right",
-    marginRight: 26,
-    fontSize   : 12,
+  snowman: {
+    width : width - 100,
+    height: width - 100,
+    zIndex: 9,
+    top   : 15
   },
 });

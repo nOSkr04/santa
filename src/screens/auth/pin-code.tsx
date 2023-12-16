@@ -4,14 +4,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import Animated, {
   useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import { Colors } from "../../constants/colors";
 import { DialPad } from "../../components/auth/dial-pad";
-import LottieView from "lottie-react-native";
 import { Image } from "expo-image";
 import { Text } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -19,20 +21,26 @@ import { useDispatch } from "react-redux";
 import { AuthApi } from "../../api";
 import { authLogin, authLogout } from "../../store/auth-slice";
 import { useToast } from "react-native-toast-notifications";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 const width = Dimensions.get("window").width;
 
+const AnimatedImage = Animated.createAnimatedComponent(Image);
 
+const duration = 500;
 export const pinLength = 4;
 const pinContainerSize = width / 2;
 const pinMaxSize = pinContainerSize / pinLength;
 const pinSpacing = 10;
 const pinSize = pinMaxSize - pinSpacing * 2;
 const PinCodeScreen = memo(() => {
-  const animation = useRef(null);
   const dispatch = useDispatch();
   const toast = useToast();
+  const sv = useSharedValue(0);
+  const sf= useSafeAreaInsets();
+
   const [code, setCode] = useState<number[]>([]);
   const onLogin = useCallback(async () => {
+    sv.value = withRepeat(withTiming(1, { duration }), -1);
     const password = code.join("");
     try {
       const res = await AuthApi.checkLoginPassword(password);
@@ -46,8 +54,10 @@ const PinCodeScreen = memo(() => {
         duration : 2000,
         placement: "top",
       });
+      setCode([]);
+      sv.value = 0;
     }
-  }, [code, dispatch, toast]);
+  }, [code, dispatch, sv, toast]);
 
   const onLogout = useCallback(async () => {
     try {
@@ -68,21 +78,23 @@ const PinCodeScreen = memo(() => {
   useEffect(() => {
     if (code.length === 4) {
       onLogin();
-      setCode([]);
       return;
     }
   }, [code.length, onLogin]);
 
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${sv.value * 360}deg` }],
+  }));
+
+  const safeTop = useCallback(() => {
+    return{
+      marginTop: sf.top+ 10
+    };
+  },[sf.top]);
+
   return (
     <>
-      <LottieView
-        autoPlay
-        ref={animation}
-        source={require("../../assets/lottie/snow-animate.json")}
-        style={styles.root}
-      />
-
-      <View style={styles.appBar}>
+      <View style={[styles.appBar, safeTop()]}>
         <TouchableOpacity onPress={onLogout} style={styles.backButton}>
           <AntDesign color={Colors.black} name="left" size={24} />
         </TouchableOpacity>
@@ -94,7 +106,7 @@ const PinCodeScreen = memo(() => {
 
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Image contentFit="contain" source={require("../../assets/app/santa1.png")} style={styles.headerImage} transition={500} />
+          <AnimatedImage contentFit="contain" source={require("../../assets/app/santa1.png")} style={[styles.headerImage, animatedStyle]} transition={500} />
           <Text style={styles.headerTitle}>Santa.mn</Text>
         </View>
         <View style={styles.pinRoot}>
@@ -105,18 +117,18 @@ const PinCodeScreen = memo(() => {
             const aniamtedStyle = useAnimatedStyle(() => {
               return {
                 height: isSelected
-                  ? withTiming(pinSize, {
-                    duration: 100,
+                  ? withSpring(pinSize, {
+                    duration: 800,
                   })
-                  : withTiming(2, {
-                    duration: 100,
+                  : withSpring(2, {
+                    duration: 800,
                   }),
                 marginBottom: isSelected
-                  ? withTiming(pinSize / 2, {
-                    duration: 100,
+                  ? withSpring(pinSize / 2, {
+                    duration: 800,
                   })
-                  : withTiming(0, {
-                    duration: 100,
+                  : withSpring(0, {
+                    duration: 800,
                   }),
                 width       : pinSize,
                 borderRadius: pinSize,
@@ -155,16 +167,6 @@ const styles = StyleSheet.create({
     height       : pinSize * 2,
     alignItems   : "flex-end",
   },
-  root: {
-    flex         : 1,
-    pointerEvents: "none",
-    position     : "absolute",
-    left         : 0,
-    top          : 0,
-    right        : 0,
-    bottom       : 0,
-    zIndex       : 2
-  },
   headerContainer: {
     flexDirection : "row",
     alignItems    : "center",
@@ -192,7 +194,6 @@ const styles = StyleSheet.create({
     zIndex          : 2,
     position        : "absolute",
     left            : 0,
-    top             : 50,
     right           : 0,
   },
   appBarTitle: {
