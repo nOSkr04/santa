@@ -14,6 +14,7 @@ export enum NavigationRoutes {
   PinCodeScreen= "PinCodeScreen",
   PinCodeRegisterScreen= "PinCodeRegisterScreen",
   NotificationScreen= "NotificationScreen",
+  CheckVersionScreen= "CheckVersionScreen",
 
 }
 
@@ -29,6 +30,7 @@ export type RootStackParamList = {
   NotificationScreen: undefined
   GiftEggScreen: undefined
   GiftEggBuyScreen: undefined
+  CheckVersionScreen: undefined
 };
 
 // export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;

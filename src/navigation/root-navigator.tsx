@@ -18,6 +18,7 @@ import { PinCodeRegisterScreen } from "../screens/auth/pin-code-register";
 import { NotificationScreen } from "../screens/home/notification";
 import { GiftEggScreen } from "../screens/home/gift-egg";
 import { GiftEggBuyScreen } from "../screens/home/gift-egg-buy";
+import { CheckVersionScreen } from "../screens/home/check-version";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -70,10 +71,11 @@ function RootNavigator() {
             <Stack.Screen component={GiftEggScreen} name={NavigationRoutes.GiftEggScreen} />
             <Stack.Screen component={GiftEggBuyScreen} name={NavigationRoutes.GiftEggBuyScreen} />
             <Stack.Screen component={NotificationScreen} name={NavigationRoutes.NotificationScreen} />
+            <Stack.Screen component={CheckVersionScreen} name={NavigationRoutes.CheckVersionScreen} />
           </>
         ) : (
           <Stack.Group>
-            {/* <Stack.Screen component={OnBoardScreen} name={NavigationRoutes.OnBoardScreen} /> */}
+            <Stack.Screen component={OnBoardScreen} name={NavigationRoutes.OnBoardScreen} />
             <Stack.Screen component={LoginScreen} name={NavigationRoutes.LoginScreen} />
             <Stack.Screen component={SignUpScreen} name={NavigationRoutes.SignUpScreen} />
           </Stack.Group>
