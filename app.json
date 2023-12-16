@@ -2,7 +2,7 @@
   "expo": {
     "name": "santa",
     "slug": "santa",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./src/assets/mobile/ios.png",
     "userInterfaceStyle": "light",
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "mn.santa",
-      "buildNumber": "2",
+      "buildNumber": "3",
       "icon": "./src/assets/mobile/ios.png"
     },
     "android": {
@@ -26,11 +26,8 @@
         "backgroundColor": "#ffffff"
       },
       "package": "mn.santa",
-      "versionCode": 3,
+      "versionCode": 4,
       "googleServicesFile": "./google-services.json"
-    },
-    "web": {
-      "favicon": "./src/assets/favicon.png"
     },
     "plugins": [
       [

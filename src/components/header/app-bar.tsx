@@ -24,7 +24,7 @@ const AppBar = ({ openDrawer }: { openDrawer: any }) => {
           <TouchableOpacity onPress={onPress}>
             <AntDesign color={Colors.white} name="menuunfold" size={24} />
           </TouchableOpacity>
-          <Image contentFit='contain' source={require("../../assets/imgs/logo.png")} style={styles.logo} />
+          <Image contentFit='contain' source={require("../../assets/img/logo.png")} style={styles.logo} />
         </View>
         <View style={styles.divider}  />
       </>

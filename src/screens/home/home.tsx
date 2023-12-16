@@ -1,4 +1,4 @@
-import { Dimensions, RefreshControl, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {  StatusBar, StyleSheet,   View } from "react-native";
 import React, { memo, useCallback, useState } from "react";
 import { Drawer } from "react-native-drawer-layout";
 import { Colors } from "../../constants/colors";
@@ -8,11 +8,9 @@ import AppBar from "../../components/header/app-bar";
 import { Banner } from "../../components/home/banner";
 import { GiftCard } from "../../components/home/gift";
 import { FlashList } from "@shopify/flash-list";
-import useSWRInfinite from "swr/infinite";
 import { GiftApi } from "../../api";
-import { IGift } from "../../interfaces/gift";
 import { Loader } from "../../components/common/loader";
-const { width } = Dimensions.get("window");
+import useSWR from "swr";
 const HomeScreen = memo(() => {
   const [open, setOpen] = useState(false);
   const closeDrawer = useCallback(() => {
@@ -22,12 +20,11 @@ const HomeScreen = memo(() => {
     setOpen(true);
   }, []);
 
-  const { data, size, setSize, isLoading } = useSWRInfinite(
-    index => `swr.gifts.${index}`,
-    async (index) => {
-      const page = index.split(".").pop();
+  const { data,   } = useSWR(
+    "swr.gifts",
+    async () => {
       const res = await GiftApi.getGifts({
-        page: parseInt(`${page || 1}`, 10)
+        page: 1
       });
       return res;
     }
@@ -76,7 +73,7 @@ const HomeScreen = memo(() => {
               ListHeaderComponent={
                 <>
                   <Banner />
-                  <View style={{
+                  {/* <View style={{
                     flexDirection   : "row",
                     alignItems      : "center", marginHorizontal: 12, justifyContent  : "space-between",
                     width           : width - 28,
@@ -123,28 +120,13 @@ const HomeScreen = memo(() => {
 
                       }}>24 төрлийн хөнгөлөлт</Text>
                     </TouchableOpacity>
-                  </View>
+                  </View> */}
                 </>
               }
-              data={(data || []).map(entry => entry?.data).flat() as IGift[]}
+              data={data?.data || []}
               estimatedItemSize={250}
               keyExtractor={item => item._id}
               numColumns={2}
-              onEndReached={() => {
-                if (size < 3) {
-                  return;
-                }
-                setSize(size + 1);
-              }}
-              onEndReachedThreshold={0.8}
-              refreshControl={
-                <RefreshControl
-                  onRefresh={() => {
-                    setSize(1);
-                  }}
-                  refreshing={isLoading}
-                />
-              }
               renderItem={renderItem}
             />
           </View>
@@ -169,13 +151,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex           : 1,
-    backgroundColor: "white"
-  },
-  title: {
-    color     : Colors.white,
-    fontFamily: "MonBold",
-    fontSize  : 14,
-    width     : width / 2 - 10
+    backgroundColor: Colors.white
   },
   loader: {
     flex           : 1,

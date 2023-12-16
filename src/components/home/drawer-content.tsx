@@ -1,11 +1,11 @@
-import {   StyleSheet,Text,TouchableOpacity, View } from "react-native";
-import React, { memo, useCallback,  } from "react";
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { memo, useCallback, } from "react";
 import { Image } from "expo-image";
 import useSWR from "swr";
 import { IUser } from "../../interfaces/user";
 import { AuthApi, UserApi } from "../../api";
 import { Colors } from "../../constants/colors";
-import { FontAwesome ,MaterialCommunityIcons,MaterialIcons  } from "@expo/vector-icons";
+import {  MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { authLogout } from "../../store/auth-slice";
 import Animated from "react-native-reanimated";
@@ -18,7 +18,14 @@ const DrawerContent = memo(() => {
   const sf = useSafeAreaInsets();
   const dispatch = useDispatch();
   const toast = useToast();
-  const { data } = useSWR<IUser>("swr.user.me", async() => {
+  const email = "santa.contactus@gmail.com";
+  const subject = "Санал хүсэлт";
+  const body = "Агуулга";
+
+  const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(
+    subject
+  )}&body=${encodeURIComponent(body)}`;
+  const { data } = useSWR<IUser>("swr.user.me", async () => {
     const res = await UserApi.me();
     return res;
   });
@@ -26,18 +33,18 @@ const DrawerContent = memo(() => {
     return {
       marginTop: sf.top
     };
-  },[sf.top]);
+  }, [sf.top]);
   const bottom = useCallback(() => {
-    return{
+    return {
       marginBottom: sf.bottom + 10
     };
-  },[sf.bottom]);
+  }, [sf.bottom]);
 
-  const onLogout = useCallback(async() => {
-    try{
+  const onLogout = useCallback(async () => {
+    try {
       await AuthApi.logout();
       dispatch(authLogout());
-    } catch(err:any){
+    } catch (err: any) {
       toast.show("Алдаа гарлаа", {
         type: "error",
         data: {
@@ -47,43 +54,43 @@ const DrawerContent = memo(() => {
         placement: "top",
       });
     }
-  },[dispatch, toast]);
+  }, [dispatch, toast]);
 
 
 
-    return (
-      <View style={[styles.container, top()]}>
-        <View>
-          <View style={styles.userContainer}>
-            <Image source={require("../../assets/mobile/ios.png")}  style={styles.avatar}  />
-            <View style={styles.detailContainer}>
-              <Text style={styles.phone}>{data?.phone}</Text>
-              <Text style={styles.eggTitle}>{data?.eggCount || 0} өндөг</Text>
-            </View>
+  return (
+    <View style={[styles.container, top()]}>
+      <View>
+        <View style={styles.userContainer}>
+          <Image source={require("../../assets/mobile/ios.png")} style={styles.avatar} />
+          <View style={styles.detailContainer}>
+            <Text style={styles.phone}>{data?.phone}</Text>
+            <Text style={styles.eggTitle}>{data?.eggCount || 0} өндөг</Text>
           </View>
-          <View style={styles.h24}  />
-          <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.PrivacyScreen)} style={styles.content}>
-            <MaterialIcons color={Colors.primary} name="privacy-tip" size={24} />
-            <Animated.Text sharedTransitionTag="privacyText" style={styles.contentTitle}>Үйлчилгээний нөхцөл</Animated.Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.BuyEggScreen, { sideBar: true })} style={styles.content}>
-            <MaterialCommunityIcons  color={Colors.primary} name="egg-easter" size={24} />
-            <Animated.Text sharedTransitionTag="addEgg21" style={styles.contentTitle}>Өндөг авах</Animated.Text>
-          </TouchableOpacity>
-          <TouchableOpacity  onPress={() => navigation.navigate(NavigationRoutes.GiftEggScreen)} style={styles.content}>
-            <MaterialCommunityIcons  color={Colors.primary} name="gift" size={24} />
-            <Animated.Text sharedTransitionTag="giftEgg" style={styles.contentTitle}>Өндөг бэлэглэх</Animated.Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.BuyEggScreen, { sideBar: true })} style={styles.content}>
-            <View style={styles.w5}  />
-            <FontAwesome   color={Colors.primary} name="lock" size={24} />
-            <View style={styles.w3}  />
-            <View>
-              <Animated.Text  style={styles.contentTitle}>Өндөг задлах</Animated.Text>
-              <Animated.Text  style={styles.contentDescription}>2024.01.01 01:00</Animated.Text>
-            </View>
-          </TouchableOpacity>
-          {/* <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.NotificationScreen)} style={styles.contentRoot}>
+        </View>
+        <View style={styles.h24} />
+        <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.PrivacyScreen)} style={styles.content}>
+          <MaterialIcons color={Colors.primary} name="privacy-tip" size={24} />
+          <Animated.Text sharedTransitionTag="privacyText" style={styles.contentTitle}>Үйлчилгээний нөхцөл</Animated.Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.BuyEggScreen, { sideBar: true })} style={styles.content}>
+          <MaterialCommunityIcons color={Colors.primary} name="egg-easter" size={24} />
+          <Animated.Text sharedTransitionTag="addEgg21" style={styles.contentTitle}>Өндөг авах</Animated.Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.GiftEggScreen)} style={styles.content}>
+          <MaterialCommunityIcons color={Colors.primary} name="gift" size={24} />
+          <Animated.Text sharedTransitionTag="giftEgg" style={styles.contentTitle}>Өндөг бэлэглэх</Animated.Text>
+        </TouchableOpacity>
+        {/* <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.BuyEggScreen, { sideBar: true })} style={styles.content}>
+          <View style={styles.w5} />
+          <FontAwesome color={Colors.primary} name="lock" size={24} />
+          <View style={styles.w3} />
+          <View>
+            <Animated.Text style={styles.contentTitle}>Өндөг задлах</Animated.Text>
+            <Animated.Text style={styles.contentDescription}>2024.01.01 01:00</Animated.Text>
+          </View>
+        </TouchableOpacity> */}
+        {/* <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.NotificationScreen)} style={styles.contentRoot}>
             <View style={styles.content}>
               <MaterialCommunityIcons  color={Colors.black} name="notification-clear-all" size={24} />
               <Animated.Text sharedTransitionTag="notifficationTitle" style={styles.contentTitle}>Мэдэгдэл</Animated.Text>
@@ -94,26 +101,28 @@ const DrawerContent = memo(() => {
               </View>
             }
           </TouchableOpacity> */}
-          <TouchableOpacity style={styles.content}>
-            <View style={styles.w3}  />
-            <MaterialCommunityIcons  color={Colors.primary} name="email" size={20} />
-            <View style={styles.w2}/>
-            <Text style={styles.contentTitle}>Холбоо барих</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.bottomContainer}>
-          <View style={styles.divider}  />
-          <TouchableOpacity onPress={onLogout} style={[styles.content, bottom()]}>
-            <MaterialCommunityIcons  color={Colors.primary} name="exit-run" size={24} />
-            <Text style={styles.contentTitle}>Гарах</Text>
-          </TouchableOpacity>
-        
-        </View>
+        <TouchableOpacity onPress={() => {
+          Linking.openURL(mailtoLink);
+        }} style={styles.content} >
+          <View style={styles.w3} />
+          <MaterialCommunityIcons color={Colors.primary} name="email" size={20} />
+          <View style={styles.w2} />
+          <Text style={styles.contentTitle}>Холбоо барих</Text>
+        </TouchableOpacity>
       </View>
-    );
-  });
+      <View style={styles.bottomContainer}>
+        <View style={styles.divider} />
+        <TouchableOpacity onPress={onLogout} style={[styles.content, bottom()]}>
+          <MaterialCommunityIcons color={Colors.primary} name="exit-run" size={24} />
+          <Text style={styles.contentTitle}>Гарах</Text>
+        </TouchableOpacity>
 
-  DrawerContent.displayName="DrawerContent";
+      </View>
+    </View>
+  );
+});
+
+DrawerContent.displayName = "DrawerContent";
 
 export { DrawerContent };
 
@@ -127,7 +136,7 @@ const styles = StyleSheet.create({
     width       : 56,
     height      : 56,
     borderRadius: 100,
-  
+
   },
   phone: {
     fontSize  : 18,
@@ -174,7 +183,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
   },
   bottomContainer: {
-   
+
   },
   version: {
     textAlign   : "right",
