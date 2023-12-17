@@ -61,12 +61,29 @@ const BuyEggScreen = memo(({ route }: Props) => {
 
   const minusEgg = useCallback(() => {
     const eggInt = parseInt(egg, 10);
+    if(eggInt <= 1){
+      return;
+    }
     setEgg(`${eggInt - 1}`);
   }, [egg]);
   const plusEgg = useCallback(() => {
     const eggInt = parseInt(egg, 10);
     setEgg(`${eggInt + 1}`);
   }, [egg]);
+
+  const setPlusButton = useCallback((plusEggs: string) => {
+    
+    const eggInt = parseInt(egg, 10);
+    const plusEgg = parseInt(plusEggs, 10);
+    if(!egg || egg === "NaN"){
+      setEgg(`${plusEggs}`);
+      return; 
+    }
+    const sumEgg = eggInt + plusEgg;
+    setEgg(`${sumEgg}`);
+  },[egg]);
+
+
 
   return (
     <>
@@ -110,13 +127,13 @@ const BuyEggScreen = memo(({ route }: Props) => {
 
               </View>
               <View style={styles.buttonRow}>
-                <TouchableOpacity onPress={() => setEgg("1")} style={styles.rowButton}>
+                <TouchableOpacity onPress={() => setPlusButton("1")} style={styles.rowButton}>
                   <Text style={styles.rowButtonTitle}>1 ширхэг</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setEgg("3")} style={styles.rowButton}>
+                <TouchableOpacity onPress={() => setPlusButton("3")} style={styles.rowButton}>
                   <Text style={styles.rowButtonTitle}>3 ширхэг</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setEgg("5")} style={styles.rowButton}>
+                <TouchableOpacity onPress={() => setPlusButton("5")} style={styles.rowButton}>
                   <Text style={styles.rowButtonTitle}>5 ширхэг</Text>
                 </TouchableOpacity>
               </View>
