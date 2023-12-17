@@ -19,6 +19,7 @@ import { NotificationScreen } from "../screens/home/notification";
 import { GiftEggScreen } from "../screens/home/gift-egg";
 import { GiftEggBuyScreen } from "../screens/home/gift-egg-buy";
 import { CheckVersionScreen } from "../screens/home/check-version";
+import { PinCodeVerifyScreen } from "../screens/auth/pin-code-verify";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -49,7 +50,10 @@ function RootNavigator() {
     }
     if (user?.type === "CHECK_PHONE_REGISTER") {
       return (
-        <Stack.Screen component={PinCodeRegisterScreen} name={NavigationRoutes.PinCodeRegisterScreen}  />
+        <>
+          <Stack.Screen component={PinCodeVerifyScreen} name={NavigationRoutes.PinCodeVerifyScreen}  />
+          <Stack.Screen component={PinCodeRegisterScreen} name={NavigationRoutes.PinCodeRegisterScreen}  />
+        </>
       );
     }
   };

@@ -18,7 +18,6 @@ const NotificationScreen = memo(() => {
       });
       return res;
     },
-
   );
 
 

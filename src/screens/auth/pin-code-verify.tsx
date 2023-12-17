@@ -18,50 +18,41 @@ import { Text } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useDispatch } from "react-redux";
 import { AuthApi } from "../../api";
-import { authLogin,  } from "../../store/auth-slice";
+import {  authLogout } from "../../store/auth-slice";
 import { useToast } from "react-native-toast-notifications";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { NavigationRoutes, RootStackParamList } from "../../navigation/types";
 import { useNavigation } from "@react-navigation/native";
+import { NavigationRoutes } from "../../navigation/types";
 const width = Dimensions.get("window").width;
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
-type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.PinCodeRegisterScreen>;
+
 export const pinLength = 4;
 const duration = 500;
 const pinContainerSize = width / 2;
 const pinMaxSize = pinContainerSize / pinLength;
 const pinSpacing = 10;
 const pinSize = pinMaxSize - pinSpacing * 2;
-const PinCodeRegisterScreen = memo(({ route }: Props) => {
-  const { password } = route.params;
+const PinCodeVerifyScreen = memo(() => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const sv = useSharedValue(0);
-  const navigation = useNavigation();
   const sf=  useSafeAreaInsets();
   const toast = useToast();
   const [code, setCode] = useState<number[]>([]);
-
   const onLogin = useCallback(async () => {
     sv.value = withRepeat(withTiming(1, { duration }), -1);
-    const createPassword = code.join("");
-    if(password !== createPassword){
-      return toast.show("Нууц үг таарахгүй байна", {
-        type: "error",
-        data: {
-          title: "Нууц үг таарахгүй байна"
-        },
-        duration : 2000,
-        placement: "top"
-      });
-    }
+    const password = code.join("");
+    navigation.navigate(NavigationRoutes.PinCodeRegisterScreen, { password });
+  }, [code, navigation, sv]);
+  const onLogout = useCallback(async () => {
+    sv.value = withRepeat(withTiming(1, { duration }), -1);
     try {
-      const res = await AuthApi.checkRegisterPassword(password);
-      dispatch(authLogin(res));
-    } catch (err: any) {
-      sv.value = 0;
+      await AuthApi.logout();
+      await AuthApi.deleteUser();
+      dispatch(authLogout());
       setCode([]);
+    } catch (err: any) {
       toast.show("Алдаа", {
         type: "error",
         data: {
@@ -70,11 +61,10 @@ const PinCodeRegisterScreen = memo(({ route }: Props) => {
         duration : 2000,
         placement: "top",
       });
+      sv.value = 0;
     }
-  }, [code, dispatch, password, sv, toast]);
-  const onBack = useCallback(async () => {
-    navigation.goBack();
-  }, [navigation]);
+    setCode([]);
+  }, [dispatch, sv, toast]);
 
   useEffect(() => {
     if (code.length === 4) {
@@ -96,10 +86,10 @@ const PinCodeRegisterScreen = memo(({ route }: Props) => {
   return (
     <>
       <View style={[styles.appBar, safeTop()]}>
-        <TouchableOpacity onPress={onBack} style={styles.backButton}>
+        <TouchableOpacity onPress={onLogout} style={styles.backButton}>
           <AntDesign color={Colors.black} name="left" size={24} />
         </TouchableOpacity>
-        <Text style={styles.appBarTitle}>Пин код баталгаажуулах</Text>
+        <Text style={styles.appBarTitle}>Пин код үүсгэх</Text>
         <View style={styles.backButton}>
           <AntDesign color={Colors.white} name="left" size={24} />
         </View>
@@ -149,9 +139,9 @@ const PinCodeRegisterScreen = memo(({ route }: Props) => {
   );
 });
 
-PinCodeRegisterScreen.displayName = "PinCodeRegisterScreen";
+PinCodeVerifyScreen.displayName = "PinCodeVerifyScreen";
 
-export { PinCodeRegisterScreen };
+export { PinCodeVerifyScreen };
 
 const styles = StyleSheet.create({
   container: {

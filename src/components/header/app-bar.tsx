@@ -28,7 +28,7 @@ const AppBar = ({ openDrawer }: { openDrawer: () => void }) => {
             <AntDesign color={Colors.white} name="menuunfold" size={24} />
             {data?.notificationCount !== 0 &&
               <View style={styles.badgeContainer}>
-                <Text style={styles.badge}>{data?.notificationCount || 0}</Text>
+                <Text style={styles.badge}>{data?.notificationCount > 9 ? "9+"  : data?.notificationCount}</Text>
               </View>
           }
           </TouchableOpacity>
@@ -68,13 +68,17 @@ const styles = StyleSheet.create({
       borderRadius   : 100,
       position       : "absolute",
       right          : 10,
-      bottom         : -5
+      bottom         : -5,
+      height         : 24,
+      width          : 24,
+      alignItems     : "center",
+      justifyContent : "center"
     },
     badge: {
-      fontSize         : 12,
-      fontFamily       : "MonSemiBold",
-      color            : Colors.primary,
-      paddingHorizontal: 9,
-      paddingVertical  : 4
+      fontSize  : 12,
+      fontFamily: "MonSemiBold",
+      color     : Colors.primary,
+      
+      
     },
 });

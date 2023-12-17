@@ -15,17 +15,18 @@ type Props = {
     payment: string
     egg: number
     goBack: () => void
+    phone: string
 }
 
-const QpaySheet = memo(({ payment, egg, closeBottomSheet, goBack }: Props) => {
+const GiftQpaySheet = memo(({ payment, egg, closeBottomSheet, goBack,phone }: Props) => {
     const { data: user } = useSWR<IUser>("swr.user.me");
-    const { data } = useSWR<IWallet>(`swr.wallet.${payment}`, async () => {
+    const { data } = useSWR<IWallet>(`swr.giftWallet.${payment}`, async () => {
         const { data } = await UserApi.getWallet(payment);
         return data;
     });
 
-    const { data: check, } = useSWR(`swr.check.${payment}`, async () => {
-        const res = await UserApi.checkInvoince(data?.invoiceId || "", user?._id || "");
+    const { data: check, } = useSWR(`swr.check.${payment}.${phone}`, async () => {
+        const res = await UserApi.checkGift(data?.invoiceId || "", user?._id || "", phone);
         return res;
     });
 
@@ -64,9 +65,9 @@ const QpaySheet = memo(({ payment, egg, closeBottomSheet, goBack }: Props) => {
     );
 });
 
-QpaySheet.displayName = "QpaySheet";
+GiftQpaySheet.displayName = "GiftQpaySheet";
 
-export { QpaySheet };
+export { GiftQpaySheet };
 
 const styles = StyleSheet.create({
     container: {

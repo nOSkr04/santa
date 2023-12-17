@@ -13,6 +13,7 @@ export enum NavigationRoutes {
   GiftEggBuyScreen= "GiftEggBuyScreen",
   PinCodeScreen= "PinCodeScreen",
   PinCodeRegisterScreen= "PinCodeRegisterScreen",
+  PinCodeVerifyScreen= "PinCodeVerifyScreen",
   NotificationScreen= "NotificationScreen",
   CheckVersionScreen= "CheckVersionScreen",
 
@@ -22,14 +23,15 @@ export type RootStackParamList = {
   LoginScreen: undefined
   SignUpScreen: undefined
   PinCodeScreen:undefined
-  PinCodeRegisterScreen:undefined
+  PinCodeRegisterScreen:{password: string}
+  PinCodeVerifyScreen: undefined
   HomeScreen: undefined
   OnBoardScreen: undefined
   PrivacyScreen: undefined
   BuyEggScreen: {sideBar?: boolean}
   NotificationScreen: undefined
   GiftEggScreen: undefined
-  GiftEggBuyScreen: undefined
+  GiftEggBuyScreen: {phone :string}
   CheckVersionScreen: undefined
 };
 

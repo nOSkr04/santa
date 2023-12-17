@@ -8,14 +8,18 @@ import { UserApi } from "../../api";
 import useSWR from "swr";
 import { IUser } from "../../interfaces/user";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { QpaySheet } from "../../components/sheet/qpay-sheet";
 import { SheetBackdrop } from "../../components/sheet/back-drop";
 import { useNavigation } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { NavigationRoutes, RootStackParamList } from "../../navigation/types";
+import { GiftQpaySheet } from "../../components/sheet/gift-qpay-sheet";
 const width = Dimensions.get("window").width;
 
+type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.GiftEggBuyScreen>;
 
-const GiftEggBuyScreen = memo(() => {
+const GiftEggBuyScreen = memo(({ route }: Props) => {
+  const { phone } = route.params;
   const animate = useRef(null);
   const { data } = useSWR<IUser>("swr.user.me");
   const navigation = useNavigation();
@@ -31,7 +35,7 @@ const GiftEggBuyScreen = memo(() => {
     setLoading(true);
     const amout = intEgg * 100;
     try {
-      const res = await UserApi.postInvoice(data!._id, amout);
+      const res = await UserApi.postGift(data!._id, amout, phone);
       setPayment(res.data);
       onQpaySheet();
     } catch (err) {
@@ -67,7 +71,7 @@ const GiftEggBuyScreen = memo(() => {
 
   return (
     <>
-      <BackAppBar sharedTag={"giftEggBuy"} title="Өндөг авах" />
+      <BackAppBar sharedTag={"giftEggBuy"} title="Өндөг бэлэглэх" />
       <View style={styles.divider} />
 
       {loading ?
@@ -139,7 +143,7 @@ const GiftEggBuyScreen = memo(() => {
           ref={bottomSheetModalRef}
           snapPoints={snapPoints}
         >
-          <QpaySheet closeBottomSheet={closeBottomSheet} egg={intEgg} goBack={goBack} payment={payment} />
+          <GiftQpaySheet closeBottomSheet={closeBottomSheet} egg={intEgg} goBack={goBack} payment={payment} phone={phone} />
         </BottomSheetModal>
       }
     </>
