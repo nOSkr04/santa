@@ -1,4 +1,4 @@
-import { RefreshControl, StyleSheet, View } from "react-native";
+import { RefreshControl, StyleSheet, Text, View } from "react-native";
 import React, { memo, useCallback } from "react";
 import { NotificationBackAppBar } from "../../components/header/notification-back-app-bar";
 import { Colors } from "../../constants/colors";
@@ -13,34 +13,28 @@ const NotificationScreen = memo(() => {
     index => `swr.notifcation.${index}`,
     async (index) => {
       const page = index.split(".").pop();
-      const { data } = await NotificationApi.getNotificaiton({
-        page: parseInt(`${page || 1}`, 10)
+      const res = await NotificationApi.getNotificaiton({
+        page: parseInt(`${page || 1}`, 10) + 1
       });
-      return data;
+      return res;
     },
-    { revalidateAll: true }
 
   );
 
-  console.log(data?.flat());
-
-  // console.log((data || []).map(entry => entry?.data).flat());
 
   const renderItem = useCallback(({ item }: { item: INotification }) => {
-    if(!item){
-      return null;
-    }
     return <NotificationCard item={item} />;
   }, []);
-
+  const keyExtractor = useCallback((item: INotification, i: number) => `${i}-${item._id}`, []);
   return (
-    <>
+    <View style={styles.container}>
       <NotificationBackAppBar sharedTag="notifficationTitle" title="Мэдэгдэл" />
       <View style={styles.container}>
         <FlashList 
-        data={data?.flat()} 
-        estimatedItemSize={150} 
-        keyExtractor={item => item._id}
+        ListHeaderComponent={<Text style={styles.title}>Нийт мэдэгдэл</Text>}
+        data={(data || []).map(entry => entry?.data).flat()} 
+        estimatedItemSize={100} 
+        keyExtractor={keyExtractor}
         onEndReached={() => setSize(size + 1)}
         onEndReachedThreshold={0.5}
         refreshControl={
@@ -55,7 +49,7 @@ const NotificationScreen = memo(() => {
         showsVerticalScrollIndicator={false}
         />
       </View>
-    </>
+    </View>
   );
 });
 
@@ -66,6 +60,13 @@ export { NotificationScreen };
 const styles = StyleSheet.create({
   container: {
     flex           : 1,
-    backgroundColor: Colors.primary
+    backgroundColor: Colors.white
+  },
+  title: {
+    marginHorizontal: 24,
+    marginTop       : 12,
+    fontSize        : 20,
+    fontFamily      : "MonBold",
+    color           : Colors.text
   }
 });

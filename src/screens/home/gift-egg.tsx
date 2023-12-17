@@ -14,7 +14,6 @@ const GiftEggScreen = memo(() => {
     const navigaiton = useNavigation();
 
     const onPress = async () => {
-        console.log("first");
         navigaiton.navigate(NavigationRoutes.GiftEggBuyScreen);
     };
 

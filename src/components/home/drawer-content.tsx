@@ -5,7 +5,7 @@ import useSWR from "swr";
 import { IUser } from "../../interfaces/user";
 import { AuthApi, UserApi } from "../../api";
 import { Colors } from "../../constants/colors";
-import {  MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { authLogout } from "../../store/auth-slice";
 import Animated from "react-native-reanimated";
@@ -56,6 +56,12 @@ const DrawerContent = memo(() => {
     }
   }, [dispatch, toast]);
 
+  const onNotification = useCallback(() => {
+    navigation.navigate(NavigationRoutes.NotificationScreen);
+
+    
+    }, [navigation]);
+
 
 
   return (
@@ -90,17 +96,17 @@ const DrawerContent = memo(() => {
             <Animated.Text style={styles.contentDescription}>2024.01.01 01:00</Animated.Text>
           </View>
         </TouchableOpacity> */}
-        {/* <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.NotificationScreen)} style={styles.contentRoot}>
-            <View style={styles.content}>
-              <MaterialCommunityIcons  color={Colors.black} name="notification-clear-all" size={24} />
-              <Animated.Text sharedTransitionTag="notifficationTitle" style={styles.contentTitle}>Мэдэгдэл</Animated.Text>
+        <TouchableOpacity onPress={onNotification} style={styles.contentRoot}>
+          <View style={styles.content}>
+            <MaterialCommunityIcons color={Colors.primary} name="notification-clear-all" size={24} />
+            <Animated.Text sharedTransitionTag="notifficationTitle" style={styles.contentTitle}>Мэдэгдэл</Animated.Text>
+          </View>
+          {data?.notificationCount !== 0 &&
+            <View style={styles.badgeContainer}>
+              <Text style={styles.badge}>{data?.notificationCount || 0}</Text>
             </View>
-            {data?.notificationCount && 
-              <View style={styles.badgeContainer}>
-                <Text style={styles.badge}>{data?.notificationCount}</Text>
-              </View>
-            }
-          </TouchableOpacity> */}
+          }
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => {
           Linking.openURL(mailtoLink);
         }} style={styles.content} >
@@ -130,7 +136,7 @@ const styles = StyleSheet.create({
   container: {
     flex          : 1,
     paddingLeft   : 20,
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   avatar: {
     width       : 56,
@@ -205,7 +211,7 @@ const styles = StyleSheet.create({
   badge: {
     fontSize         : 12,
     fontFamily       : "MonSemiBold",
-    color            : Colors.black,
+    color            : Colors.white,
     paddingHorizontal: 8,
     paddingVertical  : 4
   },

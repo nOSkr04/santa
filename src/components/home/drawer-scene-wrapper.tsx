@@ -1,12 +1,11 @@
 import { StyleSheet,  } from "react-native";
-import React, { ReactNode, memo, useEffect,  } from "react";
+import React, { ReactNode, memo,   } from "react";
 import {  useDrawerProgress } from "react-native-drawer-layout";
-import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming,  } from "react-native-reanimated";
+import Animated, {   interpolate, useAnimatedStyle,    } from "react-native-reanimated";
 import { Colors } from "../../constants/colors";
 
 const DrawerSceneWrapper = memo(({ children }: {children:ReactNode}) => {
   const progress=  useDrawerProgress();
-  const borderRadiusValue = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -16,16 +15,9 @@ const DrawerSceneWrapper = memo(({ children }: {children:ReactNode}) => {
       { translateX: interpolate(progress.value, [0,1], [0,0,-60], "clamp") }
     ],
     // borderRadius: withTiming(0,1)
-    borderRadius: borderRadiusValue.value,
-    overflow    : "hidden"
+    overflow: "hidden"
   }));
 
-  useEffect(()=>{
-    borderRadiusValue.value = withTiming(progress.value !== 0 ? 0 : 20, {
-      duration: 1000,
-      easing  : Easing.linear,
-    });
-  },[borderRadiusValue, progress.value]);
 
   return (
     <Animated.View style={[styles.container, animatedStyle, ]}>
@@ -41,6 +33,6 @@ export { DrawerSceneWrapper };
 const styles = StyleSheet.create({
   container: {
     flex           : 1,
-    backgroundColor: Colors.primary
+    backgroundColor: Colors.white,
   },
 });

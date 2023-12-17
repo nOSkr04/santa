@@ -1,3 +1,4 @@
+import { ScopedMutator } from "swr/_internal";
 import { IUser } from "../interfaces/user";
 
 export class User implements IUser {
@@ -27,7 +28,14 @@ export class User implements IUser {
     this.notificationCount = notificationCount;
   }
 
+  setNotification(mutate: ScopedMutator) {
+    this.notificationCount = 0;
+    mutate("swr.user.me", User.fromJson(this), { revalidate: false });
+    return this;
+  }
+
   static fromJson(json: IUser) {
     return new User(json);
   }
+
 }

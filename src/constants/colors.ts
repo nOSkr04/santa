@@ -1,6 +1,7 @@
 
 export abstract class Colors  {
   static black = "#000";
+  static text = "#282829";
   static white = "#fff";
   static white40 = "rgba(255,255,255,0.4)";
   static white70 = "rgba(255,255,255,0.8)";
@@ -15,4 +16,6 @@ export abstract class Colors  {
   static background ="#ffd1b8";
   static border = "#cccccccc";
   static rgbaBg = "rgba(70, 130, 180, 0.9)";
+  static notBg = "#F3F2F8";
+  static text2 = "#7E7E7E";
 }

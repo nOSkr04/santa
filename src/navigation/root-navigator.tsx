@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationRoutes, RootStackParamList } from "./types";
 import { useSWRToken } from "../hooks/use-swr-token";
 import { authMe } from "../store/auth-slice";
-import { UserApi } from "../api";
+import { AuthApi, } from "../api";
 import { IAuth } from "../interfaces/auth";
 import { LoginScreen } from "../screens/auth/login";
 import { SignUpScreen } from "../screens/auth/sign-up";
@@ -31,7 +31,7 @@ function RootNavigator() {
   const { isInitialLoading, } = useSWRToken(
     "swr.user.me",
     async () => {
-      return await UserApi.me();
+      return await AuthApi.me();
     },
     {
       onSuccess: authData => {
