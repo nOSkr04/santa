@@ -6,6 +6,8 @@ import { IGift } from "../../interfaces/gift";
 import { GiftCard } from "../../components/home/gift";
 import { Tabs } from "react-native-collapsible-tab-view";
 import { Colors } from "../../constants/colors";
+import { FadeOutDown, ZoomInEasyDown } from "react-native-reanimated";
+import { Stagger } from "../animate/stagger-animate";
 
 const GiftTab = memo(() => {
   const { data, size, setSize, isLoading } = useSWRInfinite(
@@ -28,9 +30,17 @@ const GiftTab = memo(() => {
       };
     };
     return (
-      <View style={style()}>
-        <GiftCard item={item} />
-      </View>
+      <Stagger
+        duration={100}
+        entering={() => ZoomInEasyDown.springify()}
+        exitDirection={-1}
+        exiting={() => FadeOutDown.springify()}
+        stagger={50}
+      >
+        <View style={style()}>
+          <GiftCard item={item} />
+        </View>
+      </Stagger>
     );
   }, []);
 
