@@ -24,9 +24,8 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
   const onPress = async () => {
     setLoading(true);
     try {
-      const res = UserApi.giftUserEgg({ phone: user.phone, egg: intEgg, message: "" });
+      await UserApi.giftUserEgg({ phone: user.phone, egg: intEgg, message: "" });
       goBack();
-      console.log(res);
     } catch (err) {
       console.log(err, "aaaa");
     }
@@ -84,6 +83,7 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
               <Image contentFit="contain" source={require("../../assets/img/gift.png")} style={styles.image} />
             </View>
             <View style={styles.contentContainer}>
+              <Text style={styles.description}>{user.phone} - дугаартай хэрэглэгчэд өндөг бэлэглэх</Text>
               <Text style={styles.eggTitle}>{egg} өндөг = {(intEgg * 20000 || 0).toLocaleString()} ₮</Text>
               <View style={styles.eggContainer}>
                 <TouchableOpacity onPress={minusEgg} style={styles.sumButton}>
@@ -102,7 +102,14 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
                 <TouchableOpacity onPress={plusEgg} style={styles.sumButton}>
                   <AntDesign color={Colors.white} name="plus" size={24} />
                 </TouchableOpacity>
-
+                <TextInput
+                  cursorColor={Colors.white}
+                  onChangeText={setEgg}
+                  placeholder="Хэлэх үг"
+                  placeholderTextColor={Colors.white40}
+                  style={styles.input}
+                  value={egg.toString()}
+                />
               </View>
               <View style={styles.buttonRow}>
                 <TouchableOpacity onPress={() => setPlusButton("7")} style={styles.rowButton}>
@@ -228,6 +235,12 @@ const styles = StyleSheet.create({
     fontSize  : 14,
     fontFamily: "MonSemiBold",
     color     : Colors.white,
+  },
+  description: {
+    fontFamily: "MonMedium",
+    fontSize  : 12,
+    color     : Colors.text2,
+    textAlign : "center"
   }
 
 });

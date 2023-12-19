@@ -13,7 +13,7 @@ export const postInvoice = async (id: string, money:number) => {
 };
 
 export const findUser = async (phone: string) => {
-  const res = await httpRequest.post(`/users/find/${phone}`);
+  const res = await httpRequest.get(`/users/find/${phone}`);
   return res;
 };
 

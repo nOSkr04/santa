@@ -49,7 +49,7 @@ const DeleteUserModal = memo(({ modal, setModal }: Props) => {
             <TouchableOpacity onPress={() => setModal(false)} style={styles.backButton}>
               <AntDesign color={Colors.primary} name="close" size={24} />
             </TouchableOpacity>
-            <Image source={require("../../assets/img/message.png")} style={styles.iconContainer} />
+            <Image placeholder={"LC8$K]adRwo$n$fRbcjZRdj]omad"} source={"https://evseg.s3.ap-southeast-1.amazonaws.com/65e0bb66-9f52-498f-9cdb-3f96a8e6e602.jpg"} style={styles.iconContainer} />
             <Text style={styles.modalTitle}>Бүртгэл устгах</Text>
             <Text style={styles.modalDescription}>Та өөрийн бүртгэлийг устгавал дахиж сэргээгдэхгүй болохыг анхаарна уу!</Text>
             <View style={styles.h30} />
