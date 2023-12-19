@@ -9,6 +9,8 @@ import LottieView from "lottie-react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavigationRoutes, RootStackParamList } from "../../navigation/types";
 import { UserApi } from "../../api";
+import useSWR from "swr";
+import { IUser } from "../../interfaces/user";
 const width = Dimensions.get("window").width;
 
 type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.GiftEggUserScreen>;
@@ -21,11 +23,12 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const intEgg = parseInt(egg, 10);
+  const { data }=  useSWR<IUser>("swr.user.me");
 
   const onPress = async () => {
     setLoading(true);
     try {
-      await UserApi.giftUserEgg({ phone: user.phone, egg: intEgg, message: "" });
+      await UserApi.giftUserEgg({ phone: user.phone, egg: intEgg, message: message });
       goBack();
     } catch (err) {
       console.log(err, "aaaa");
@@ -48,12 +51,17 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
   }, [egg]);
   const plusEgg = useCallback(() => {
     const eggInt = parseInt(egg, 10);
+  if((data?.eggCount || 0) < eggInt){
+    return;
+  }
     setEgg(`${eggInt + 1}`);
-  }, [egg]);
+  }, [data?.eggCount, egg]);
 
   const setPlusButton = useCallback((plusEggs: string) => {
-    
     const eggInt = parseInt(egg, 10);
+  if((data?.eggCount || 0) < eggInt){
+    return setEgg(`${data?.eggCount}`);
+  }
     const plusEgg = parseInt(plusEggs, 10);
     if(!egg || egg === "NaN"){
       setEgg(`${plusEggs}`);
@@ -61,7 +69,7 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
     }
     const sumEgg = eggInt + plusEgg;
     setEgg(`${sumEgg}`);
-  },[egg]);
+  },[data?.eggCount, egg]);
 
   return (
     <>

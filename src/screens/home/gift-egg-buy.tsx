@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {  Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { memo, useCallback, useMemo, useRef, useState } from "react";
 import { BackAppBar } from "../../components/header/back-app-bar";
 import { Colors } from "../../constants/colors";
@@ -14,12 +14,13 @@ import LottieView from "lottie-react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavigationRoutes, RootStackParamList } from "../../navigation/types";
 import { GiftQpaySheet } from "../../components/sheet/gift-qpay-sheet";
+import { Loading } from "../../components/common/loading";
 const width = Dimensions.get("window").width;
 
 type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.GiftEggBuyScreen>;
 
 const GiftEggBuyScreen = memo(({ route }: Props) => {
-  const { phone } = route.params;
+  const { user } = route.params;
   const animate = useRef(null);
   const { data } = useSWR<IUser>("swr.user.me");
   const navigation = useNavigation();
@@ -35,7 +36,7 @@ const GiftEggBuyScreen = memo(({ route }: Props) => {
     setLoading(true);
     const amout = intEgg * 100;
     try {
-      const res = await UserApi.postGift(data!._id, amout, phone);
+      const res = await UserApi.postGift(data!._id, amout, user.phone);
       setPayment(res.data);
       onQpaySheet();
     } catch (err) {
@@ -90,7 +91,9 @@ const GiftEggBuyScreen = memo(({ route }: Props) => {
       <View style={styles.divider} />
 
       {loading ?
-        <ActivityIndicator />
+        <View style={styles.loading}>
+          <Loading title />
+        </View>
         :
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.root}>
           <ScrollView contentContainerStyle={styles.container}>
@@ -158,7 +161,7 @@ const GiftEggBuyScreen = memo(({ route }: Props) => {
           ref={bottomSheetModalRef}
           snapPoints={snapPoints}
         >
-          <GiftQpaySheet closeBottomSheet={closeBottomSheet} egg={intEgg} goBack={goBack} payment={payment} phone={phone} />
+          <GiftQpaySheet closeBottomSheet={closeBottomSheet} egg={intEgg} goBack={goBack} payment={payment} phone={user.phone} />
         </BottomSheetModal>
       }
     </>
@@ -265,6 +268,12 @@ const styles = StyleSheet.create({
     fontSize  : 14,
     fontFamily: "MonSemiBold",
     color     : Colors.white,
+  },
+  loading: {
+    backgroundColor: Colors.primary,
+    alignItems     : "center",
+    justifyContent : "center",
+    flex           : 1
   }
 
 });
