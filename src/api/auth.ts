@@ -37,10 +37,12 @@ export const login = async (data: {
   const res = await httpRequest.post("/users/login", data);
   return res;
 };
+
 export const deleteUser = async () => {
   const res = await httpRequest.del("/users/delete");
   return res;
 };
+
 export const signUp = async (data: {
   phone: string,
   expoPushToken: string
@@ -53,5 +55,7 @@ export const logout = async () => {
   const res = await httpRequest.get("/users/logout");
   return res;
 };
+
+
 
 

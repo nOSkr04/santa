@@ -1,11 +1,11 @@
-import { Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { memo, useCallback, } from "react";
 import { Image } from "expo-image";
 import useSWR from "swr";
 import { IUser } from "../../interfaces/user";
 import { AuthApi, UserApi } from "../../api";
 import { Colors } from "../../constants/colors";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { authLogout } from "../../store/auth-slice";
 import Animated from "react-native-reanimated";
@@ -62,6 +62,30 @@ const DrawerContent = memo(() => {
     
     }, [navigation]);
 
+    const onDeleteUser = useCallback(() => {
+      Alert.alert("Бүртгэл устгах!", "Та өөрийн бүртгэлээ устгахдаа итгэлтэй байна уу!", [
+        {
+          text : "Үгүй",
+          style: "cancel",
+        },
+        { text   : "Тийм", onPress: async() => {
+          try{
+            await AuthApi.deleteUser();
+            dispatch(authLogout());
+          } catch(err:any){
+            toast.show("Алдаа гарлаа", {
+              type: "error",
+              data: {
+                title: err?.error?.message || "Алдаа гарлаа",
+              },
+              duration : 2000,
+              placement: "top",
+            });
+          }
+        } },
+      ]);
+    },[dispatch, toast]);
+
 
 
   return (
@@ -114,6 +138,12 @@ const DrawerContent = memo(() => {
           <MaterialCommunityIcons color={Colors.primary} name="email" size={20} />
           <View style={styles.w2} />
           <Text style={styles.contentTitle}>Холбоо барих</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onDeleteUser} style={styles.content} >
+          <View style={styles.w3} />
+          <AntDesign color={Colors.primary} name="deleteuser" size={20} />
+          <View style={styles.w2} />
+          <Text style={styles.contentTitle}>Бүртгэл устгах</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.bottomContainer}>
