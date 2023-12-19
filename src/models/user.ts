@@ -5,7 +5,7 @@ export class User implements IUser {
   _id: string;
   role:string;
   phone: string;
-  eggCount: string;
+  eggCount: number;
   version: string;
   type: string;
   notificationCount:number;

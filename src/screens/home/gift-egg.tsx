@@ -1,12 +1,14 @@
 import { Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import React, { memo, useRef, } from "react";
-import { BackAppBar } from "../../components/header/back-app-bar";
-import { Colors } from "../../constants/colors";
+import React, { memo, useRef, useState, } from "react";
 import { Image } from "expo-image";
 import LottieView from "lottie-react-native";
-import { useNavigation } from "@react-navigation/native";
-import { NavigationRoutes } from "../../navigation/types";
 import { Controller, useForm } from "react-hook-form";
+
+import { BackAppBar } from "../../components/header/back-app-bar";
+import { Colors } from "../../constants/colors";
+import { GiftChooseModal } from "../../components/modal/gift-choose-modal";
+import { UserApi } from "../../api";
+
 const width = Dimensions.get("window").width;
 
 type GiftPhone = {
@@ -15,13 +17,30 @@ type GiftPhone = {
 
 const GiftEggScreen = memo(() => {
   const animate = useRef(null);
-  const navigaiton = useNavigation();
+  const [modal, setModal] = useState(false);
+  const [user, setUser] = useState({
+    phone : "",
+    isUser: false,
+  });
 
   const { handleSubmit, control, formState: { errors } } = useForm<GiftPhone>();
 
   const onSubmit = async (data: GiftPhone) => {
-    navigaiton.navigate(NavigationRoutes.GiftEggBuyScreen, { phone: data.phone });
+    
+    const phone = data.phone;
+    try{
+      const user = await UserApi.findUser(phone);
+      setUser({
+        phone : phone,
+        isUser: user.status
+      });
+      setModal(true);
+    } catch(err){
+      console.log(err);
+    }
   };
+
+ 
 
   return (
     <>
@@ -65,6 +84,7 @@ const GiftEggScreen = memo(() => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      <GiftChooseModal modal={modal}  setModal={setModal}  user={user} />
     </>
   );
 });
@@ -157,5 +177,4 @@ const styles = StyleSheet.create({
     marginTop : 8,
     marginLeft: 24
   },
-
 });

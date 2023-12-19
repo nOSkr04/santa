@@ -18,4 +18,5 @@ export abstract class Colors  {
   static rgbaBg = "rgba(70, 130, 180, 0.9)";
   static notBg = "#F3F2F8";
   static text2 = "#7E7E7E";
+  static button = "#4E5876";
 }

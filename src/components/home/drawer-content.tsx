@@ -1,5 +1,5 @@
-import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { memo, useCallback, } from "react";
+import {  Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { memo, useCallback, useState, } from "react";
 import { Image } from "expo-image";
 import useSWR from "swr";
 import { IUser } from "../../interfaces/user";
@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutes } from "../../navigation/types";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useToast } from "react-native-toast-notifications";
+import { DeleteUserModal } from "../modal/delete-user-modal";
 const DrawerContent = memo(() => {
   const navigation = useNavigation();
   const sf = useSafeAreaInsets();
@@ -29,6 +30,7 @@ const DrawerContent = memo(() => {
     const res = await UserApi.me();
     return res;
   });
+  const [modal,setModal] = useState(false);
   const top = useCallback(() => {
     return {
       marginTop: sf.top
@@ -63,28 +65,8 @@ const DrawerContent = memo(() => {
     }, [navigation]);
 
     const onDeleteUser = useCallback(() => {
-      Alert.alert("Бүртгэл устгах!", "Та өөрийн бүртгэлээ устгахдаа итгэлтэй байна уу!", [
-        {
-          text : "Үгүй",
-          style: "cancel",
-        },
-        { text   : "Тийм", onPress: async() => {
-          try{
-            await AuthApi.deleteUser();
-            dispatch(authLogout());
-          } catch(err:any){
-            toast.show("Алдаа гарлаа", {
-              type: "error",
-              data: {
-                title: err?.error?.message || "Алдаа гарлаа",
-              },
-              duration : 2000,
-              placement: "top",
-            });
-          }
-        } },
-      ]);
-    },[dispatch, toast]);
+      setModal(true);
+    },[]);
 
 
 
@@ -154,6 +136,7 @@ const DrawerContent = memo(() => {
         </TouchableOpacity>
 
       </View>
+      <DeleteUserModal modal={modal} setModal={setModal}  />
     </View>
   );
 });

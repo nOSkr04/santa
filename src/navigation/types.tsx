@@ -16,6 +16,7 @@ export enum NavigationRoutes {
   PinCodeVerifyScreen= "PinCodeVerifyScreen",
   NotificationScreen= "NotificationScreen",
   CheckVersionScreen= "CheckVersionScreen",
+  GiftEggUserScreen= "GiftEggUserScreen",
 
 }
 
@@ -31,7 +32,14 @@ export type RootStackParamList = {
   BuyEggScreen: {sideBar?: boolean}
   NotificationScreen: undefined
   GiftEggScreen: undefined
-  GiftEggBuyScreen: {phone :string}
+  GiftEggBuyScreen: {user: {
+    phone: string,
+    isUser: boolean
+  }}
+  GiftEggUserScreen: {user: {
+    phone: string,
+    isUser: boolean
+  }}
   CheckVersionScreen: undefined
 };
 

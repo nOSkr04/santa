@@ -12,6 +12,16 @@ export const postInvoice = async (id: string, money:number) => {
   return res;
 };
 
+export const findUser = async (phone: string) => {
+  const res = await httpRequest.post(`/users/find/${phone}`);
+  return res;
+};
+
+export const giftUserEgg = async({ phone, egg, message }: {phone: string, egg: number, message: string}) => {
+  const res = await httpRequest.post("/users/giftUser", { phone, egg,message });
+  return res;
+};
+
 export const postGift = async (id: string, money:number, phone: string) => {
   const res = await httpRequest.post(`/users/giftInvoice/${id}`, { amount: money,phone: phone } );
   return res;

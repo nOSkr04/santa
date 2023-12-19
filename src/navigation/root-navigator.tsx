@@ -20,6 +20,7 @@ import { GiftEggScreen } from "../screens/home/gift-egg";
 import { GiftEggBuyScreen } from "../screens/home/gift-egg-buy";
 import { CheckVersionScreen } from "../screens/home/check-version";
 import { PinCodeVerifyScreen } from "../screens/auth/pin-code-verify";
+import { GiftEggUserScreen } from "../screens/home/gift-egg-user";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -74,6 +75,7 @@ function RootNavigator() {
             <Stack.Screen component={BuyEggScreen} name={NavigationRoutes.BuyEggScreen} />
             <Stack.Screen component={GiftEggScreen} name={NavigationRoutes.GiftEggScreen} />
             <Stack.Screen component={GiftEggBuyScreen} name={NavigationRoutes.GiftEggBuyScreen} />
+            <Stack.Screen component={GiftEggUserScreen} name={NavigationRoutes.GiftEggUserScreen} />
             <Stack.Screen component={NotificationScreen} name={NavigationRoutes.NotificationScreen} />
             <Stack.Screen component={CheckVersionScreen} name={NavigationRoutes.CheckVersionScreen} />
           </>
