@@ -7,3 +7,4 @@ eas update
 ...build
 
 eas build --platform android --profile apk
+eas build -p ios --auto-submit
