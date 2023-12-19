@@ -18,6 +18,7 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
   const animate = useRef(null);
   const navigation = useNavigation();
   const [egg, setEgg] = useState("1");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const intEgg = parseInt(egg, 10);
 
@@ -102,15 +103,16 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
                 <TouchableOpacity onPress={plusEgg} style={styles.sumButton}>
                   <AntDesign color={Colors.white} name="plus" size={24} />
                 </TouchableOpacity>
-                <TextInput
+              </View>
+              <Text style={styles.messageLabel}>Хэлэх үг</Text>
+              <TextInput
                   cursorColor={Colors.white}
-                  onChangeText={setEgg}
+                  onChangeText={setMessage}
                   placeholder="Хэлэх үг"
                   placeholderTextColor={Colors.white40}
-                  style={styles.input}
-                  value={egg.toString()}
+                  style={styles.messageInput}
+                  value={message}
                 />
-              </View>
               <View style={styles.buttonRow}>
                 <TouchableOpacity onPress={() => setPlusButton("7")} style={styles.rowButton}>
                   <Text style={styles.rowButtonTitle}>7 ширхэг</Text>
@@ -241,6 +243,24 @@ const styles = StyleSheet.create({
     fontSize  : 12,
     color     : Colors.text2,
     textAlign : "center"
+  },
+  messageInput: {
+    backgroundColor: Colors.primary,
+    padding        : 12,
+    borderRadius   : 8,
+    width          : width - 56 ,
+    color          : Colors.white,
+    textAlign      : "center",
+    alignSelf      : "center"
+  },
+  messageLabel: {
+    fontFamily  : "MonMedium",
+    fontSize    : 12,
+    color       : Colors.text2,
+    marginLeft  : 24,
+    marginTop   : 16,
+    marginBottom: 8,
+
   }
 
 });

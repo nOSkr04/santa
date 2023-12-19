@@ -34,6 +34,8 @@ const GiftEggScreen = memo(() => {
         phone : phone,
         isUser: user.status
       });
+      console.log(user);
+
       setModal(true);
     } catch(err){
       console.log(err);

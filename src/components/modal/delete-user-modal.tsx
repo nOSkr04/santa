@@ -40,25 +40,29 @@ const DeleteUserModal = memo(({ modal, setModal }: Props) => {
 
   }, [dispatch, setModal, toast]);
 
+  const modalHide = () => {
+    setModal(false);
+  };
+
   return (
     <View>
-      <Modal isVisible={modal}>
+      <Modal animationIn={"pulse"}  isVisible={modal} onBackdropPress={modalHide} onModalHide={() => setModal(false)} onModalWillHide={() => setModal(false)} >
         <View style={styles.modal}>
           {loading ? <Loader /> :
           <>
             <TouchableOpacity onPress={() => setModal(false)} style={styles.backButton}>
               <AntDesign color={Colors.primary} name="close" size={24} />
             </TouchableOpacity>
-            <Image placeholder={"LC8$K]adRwo$n$fRbcjZRdj]omad"} source={"https://evseg.s3.ap-southeast-1.amazonaws.com/65e0bb66-9f52-498f-9cdb-3f96a8e6e602.jpg"} style={styles.iconContainer} />
+            <Image  source={require("../../assets/img/delete.png")} style={styles.iconContainer} />
             <Text style={styles.modalTitle}>Бүртгэл устгах</Text>
             <Text style={styles.modalDescription}>Та өөрийн бүртгэлийг устгавал дахиж сэргээгдэхгүй болохыг анхаарна уу!</Text>
             <View style={styles.h30} />
             <View style={styles.rowButton}>
               <TouchableOpacity onPress={() => setModal(false)} style={styles.secondaryButton}>
-                <Text>Болих</Text>
+                <Text style={styles.primaryTitle}>Болих</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={onDelete} style={styles.primaryButton}>
-                <Text>Устгах</Text>
+                <Text style={styles.secondaryTitle}>Устгах</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.h30} />
@@ -82,8 +86,8 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     marginTop: 35,
-    width    : 40,
-    height   : 40,
+    width    : 80,
+    height   : 80,
     alignSelf: "center"
   },
   modalTitle: {
@@ -114,21 +118,24 @@ const styles = StyleSheet.create({
   rowButton: {
     flexDirection : "row",
     alignItems    : "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    width         : "100%",
   },
   secondaryButton: {
     backgroundColor: Colors.button,
     paddingVertical: 12,
     alignItems     : "center",
     justifyContent : "center",
-    borderRadius   : 8
+    borderRadius   : 8,
+    width          : "48%"
   },
   primaryButton: {
     backgroundColor: Colors.primary,
     paddingVertical: 12,
     alignItems     : "center",
     justifyContent : "center",
-    borderRadius   : 8
+    borderRadius   : 8,
+    width          : "48%"
   },
   primaryTitle: {
     fontSize  : 15,

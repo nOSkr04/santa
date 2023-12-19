@@ -60,40 +60,37 @@ const DrawerContent = memo(() => {
 
   const onNotification = useCallback(() => {
     navigation.navigate(NavigationRoutes.NotificationScreen);
-
-    
     }, [navigation]);
 
     const onDeleteUser = useCallback(() => {
       setModal(true);
     },[]);
 
-
-
   return (
-    <View style={[styles.container, top()]}>
-      <View>
-        <View style={styles.userContainer}>
-          <Image source={require("../../assets/mobile/ios.png")} style={styles.avatar} />
-          <View style={styles.detailContainer}>
-            <Text style={styles.phone}>{data?.phone}</Text>
-            <Text style={styles.eggTitle}>{data?.eggCount || 0} өндөг</Text>
+    <>
+      <View style={[styles.container, top()]}>
+        <View>
+          <View style={styles.userContainer}>
+            <Image source={require("../../assets/mobile/ios.png")} style={styles.avatar} />
+            <View style={styles.detailContainer}>
+              <Text style={styles.phone}>{data?.phone}</Text>
+              <Text style={styles.eggTitle}>{data?.eggCount || 0} өндөг</Text>
+            </View>
           </View>
-        </View>
-        <View style={styles.h24} />
-        <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.PrivacyScreen)} style={styles.content}>
-          <MaterialIcons color={Colors.primary} name="privacy-tip" size={24} />
-          <Animated.Text sharedTransitionTag="privacyText" style={styles.contentTitle}>Үйлчилгээний нөхцөл</Animated.Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.BuyEggScreen, { sideBar: true })} style={styles.content}>
-          <MaterialCommunityIcons color={Colors.primary} name="egg-easter" size={24} />
-          <Animated.Text sharedTransitionTag="addEgg21" style={styles.contentTitle}>Өндөг авах</Animated.Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.GiftEggScreen)} style={styles.content}>
-          <MaterialCommunityIcons color={Colors.primary} name="gift" size={24} />
-          <Animated.Text sharedTransitionTag="giftEgg" style={styles.contentTitle}>Өндөг бэлэглэх</Animated.Text>
-        </TouchableOpacity>
-        {/* <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.BuyEggScreen, { sideBar: true })} style={styles.content}>
+          <View style={styles.h24} />
+          <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.PrivacyScreen)} style={styles.content}>
+            <MaterialIcons color={Colors.primary} name="privacy-tip" size={24} />
+            <Animated.Text sharedTransitionTag="privacyText" style={styles.contentTitle}>Үйлчилгээний нөхцөл</Animated.Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.BuyEggScreen, { sideBar: true })} style={styles.content}>
+            <MaterialCommunityIcons color={Colors.primary} name="egg-easter" size={24} />
+            <Animated.Text sharedTransitionTag="addEgg21" style={styles.contentTitle}>Өндөг авах</Animated.Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.GiftEggScreen)} style={styles.content}>
+            <MaterialCommunityIcons color={Colors.primary} name="gift" size={24} />
+            <Animated.Text sharedTransitionTag="giftEgg" style={styles.contentTitle}>Өндөг бэлэглэх</Animated.Text>
+          </TouchableOpacity>
+          {/* <TouchableOpacity onPress={() => navigation.navigate(NavigationRoutes.BuyEggScreen, { sideBar: true })} style={styles.content}>
           <View style={styles.w5} />
           <FontAwesome color={Colors.primary} name="lock" size={24} />
           <View style={styles.w3} />
@@ -102,42 +99,44 @@ const DrawerContent = memo(() => {
             <Animated.Text style={styles.contentDescription}>2024.01.01 01:00</Animated.Text>
           </View>
         </TouchableOpacity> */}
-        <TouchableOpacity onPress={onNotification} style={styles.contentRoot}>
-          <View style={styles.content}>
-            <MaterialCommunityIcons color={Colors.primary} name="notification-clear-all" size={24} />
-            <Animated.Text sharedTransitionTag="notifficationTitle" style={styles.contentTitle}>Мэдэгдэл</Animated.Text>
-          </View>
-          {data?.notificationCount !== 0 &&
-            <View style={styles.badgeContainer}>
-              <Text style={styles.badge}>{data?.notificationCount || 0}</Text>
+          <TouchableOpacity onPress={onNotification} style={styles.contentRoot}>
+            <View style={styles.content}>
+              <MaterialCommunityIcons color={Colors.primary} name="notification-clear-all" size={24} />
+              <Animated.Text sharedTransitionTag="notifficationTitle" style={styles.contentTitle}>Мэдэгдэл</Animated.Text>
             </View>
+            {data?.notificationCount !== 0 &&
+              <View style={styles.badgeContainer}>
+                <Text style={styles.badge}>{data?.notificationCount || 0}</Text>
+              </View>
           }
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
           Linking.openURL(mailtoLink);
-        }} style={styles.content} >
-          <View style={styles.w3} />
-          <MaterialCommunityIcons color={Colors.primary} name="email" size={20} />
-          <View style={styles.w2} />
-          <Text style={styles.contentTitle}>Холбоо барих</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onDeleteUser} style={styles.content} >
-          <View style={styles.w3} />
-          <AntDesign color={Colors.primary} name="deleteuser" size={20} />
-          <View style={styles.w2} />
-          <Text style={styles.contentTitle}>Бүртгэл устгах</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.bottomContainer}>
-        <View style={styles.divider} />
-        <TouchableOpacity onPress={onLogout} style={[styles.content, bottom()]}>
-          <MaterialCommunityIcons color={Colors.primary} name="exit-run" size={24} />
-          <Text style={styles.contentTitle}>Гарах</Text>
-        </TouchableOpacity>
+          }} style={styles.content} >
+            <View style={styles.w3} />
+            <MaterialCommunityIcons color={Colors.primary} name="email" size={20} />
+            <View style={styles.w2} />
+            <Text style={styles.contentTitle}>Холбоо барих</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onDeleteUser} style={styles.content} >
+            <View style={styles.w3} />
+            <AntDesign color={Colors.primary} name="deleteuser" size={20} />
+            <View style={styles.w2} />
+            <Text style={styles.contentTitle}>Бүртгэл устгах</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.bottomContainer}>
+          <View style={styles.divider} />
+          <TouchableOpacity onPress={onLogout} style={[styles.content, bottom()]}>
+            <MaterialCommunityIcons color={Colors.primary} name="exit-run" size={24} />
+            <Text style={styles.contentTitle}>Гарах</Text>
+          </TouchableOpacity>
 
+        </View>
+      
       </View>
       <DeleteUserModal modal={modal} setModal={setModal}  />
-    </View>
+    </>
   );
 });
 

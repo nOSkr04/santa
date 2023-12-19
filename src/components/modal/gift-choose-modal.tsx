@@ -44,21 +44,25 @@ const GiftChooseModal = memo(({ modal, user, setModal }: Props) => {
     };
   },[data?.eggCount]);
 
+  const modalHide = useCallback(() => {
+    setModal(false);
+  },[setModal]);
 
   return (
     <View>
-      <Modal isVisible={modal}>
+      <Modal animationIn={"pulse"}  isVisible={modal} onBackdropPress={modalHide} onModalHide={() => setModal(false)} onModalWillHide={() => setModal(false)}>
         <View style={styles.modal}>
           <TouchableOpacity onPress={() => setModal(false)} style={styles.backButton}>
             <AntDesign color={Colors.primary} name="close" size={24} />
           </TouchableOpacity>
-          <Image source={require("../../assets/img/message.png")} style={styles.iconContainer} />
+          <Image source={require("../../assets/img/gift-hand.png")} style={styles.iconContainer} />
           <Text style={styles.modalTitle}>Бэлэг илгээх төрөл</Text>
           <Text style={styles.modalDescription}>Та өөрийн хайртай дотнын хүндээ өөрт байгаа өндөг эсвэл худалдаж авна илгээх боломжтой.</Text>
           <View style={styles.h15} />
           <View style={styles.h15} />
           <TouchableOpacity disabled={data?.eggCount === 0} onPress={onSubmitGift} style={[styles.giftButton, opacity()]}>
-            <Text style={styles.giftTilte}>Өөрт байгаа өндөгнөөс илгээх ({data?.eggCount === 0 ? "Танд өндөг байхгүй байна" : `${data?.eggCount} өндөг`})</Text>
+            <Text style={styles.giftTilte}>Өөрт байгаа өндөгнөөс илгээх </Text>
+            <Text style={styles.giftTilte}>({data?.eggCount === 0 ? "Танд өндөг байхгүй байна" : `${data?.eggCount} өндөг`})</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={onSubmitBuy} style={styles.giftButton}>
             <Text style={styles.giftTilte}>Худалдан авж илгээх</Text>
@@ -83,8 +87,8 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     marginTop: 35,
-    width    : 40,
-    height   : 40,
+    width    : 100,
+    height   : 100,
     alignSelf: "center"
   },
   modalTitle: {
@@ -116,7 +120,8 @@ const styles = StyleSheet.create({
     fontSize  : 15,
     lineHeight: 20,
     color     : Colors.white,
-    fontFamily: "MonSemiBold"
+    fontFamily: "MonSemiBold",
+    textAlign : "center"
   },
   h15: {
     height: 15
