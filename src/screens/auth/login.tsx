@@ -26,7 +26,9 @@ const LoginScreen = memo(() => {
     try {
       const res = await AuthApi.checkLoginPhone(createData);
       dispatch(authLogin(res));
+      setLoading(false);
     } catch (err: any) {
+      setLoading(false);
       if (err.statusCode === 404) {
         setError("root", {
           message: "Серверт алдаа гарсан байна та түр хүлээнэ үү"
