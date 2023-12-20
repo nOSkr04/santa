@@ -2,7 +2,7 @@
   "expo": {
     "name": "santa",
     "slug": "santa",
-    "version": "1.0.5",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./src/assets/mobile/ios.png",
     "userInterfaceStyle": "light",
@@ -17,8 +17,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "mn.santa",
-      "buildNumber": "6",
-      "icon": "./src/assets/mobile/ios.png"
+      "buildNumber": "8",
+      "icon": "./src/assets/mobile/ios.png",
+      "entitlements": {
+        "com.apple.developer.networking.wifi-info": true
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -26,7 +29,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "mn.santa",
-      "versionCode": 9,
+      "versionCode": 12,
       "googleServicesFile": "./google-services.json"
     },
     "plugins": [

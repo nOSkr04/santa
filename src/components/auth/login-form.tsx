@@ -37,7 +37,7 @@ const LoginForm = memo(({ control, errors, onSubmit, loading }: Props) => {
       style={styles.root}
     >
       <View style={styles.h24} />
-      <Text style={styles.title}>Шинэ оны мэнд хүргэе!</Text>
+      <Text style={styles.title}>Шинэ оны мэнд хүргэе!.</Text>
       <Text style={styles.description}>Хүсэн хүлээсэн шинэ он хаяанд ирж Santa.mn хүн бүрд бэлэгтэй өндөг авчирлаа.
       </Text>
       <View style={styles.rowLabel}>
