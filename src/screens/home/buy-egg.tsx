@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {  Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { memo, useCallback, useMemo, useRef, useState } from "react";
 import { BackAppBar } from "../../components/header/back-app-bar";
 import { Colors } from "../../constants/colors";
@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutes, RootStackParamList } from "../../navigation/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import LottieView from "lottie-react-native";
+import { Loading } from "../../components/common/loading";
 const width = Dimensions.get("window").width;
 
 type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.BuyEggScreen>;
@@ -91,7 +92,9 @@ const BuyEggScreen = memo(({ route }: Props) => {
       <View style={styles.divider} />
 
       {loading ?
-        <ActivityIndicator />
+        <View style={styles.loading}>
+          <Loading title />
+        </View>
         :
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.root}>
           <ScrollView contentContainerStyle={styles.container}>
@@ -266,6 +269,12 @@ const styles = StyleSheet.create({
     fontSize  : 14,
     fontFamily: "MonSemiBold",
     color     : Colors.white,
+  },
+  loading: {
+    backgroundColor: Colors.primary,
+    alignItems     : "center",
+    justifyContent : "center",
+    flex           : 1
   }
 
 });

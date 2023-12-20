@@ -15,6 +15,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavigationRoutes, RootStackParamList } from "../../navigation/types";
 import { GiftQpaySheet } from "../../components/sheet/gift-qpay-sheet";
 import { Loading } from "../../components/common/loading";
+import { useToast } from "react-native-toast-notifications";
 const width = Dimensions.get("window").width;
 
 type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.GiftEggBuyScreen>;
@@ -22,6 +23,7 @@ type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.GiftEgg
 const GiftEggBuyScreen = memo(({ route }: Props) => {
   const { user } = route.params;
   const animate = useRef(null);
+  const toast = useToast();
   const { data } = useSWR<IUser>("swr.user.me");
   const navigation = useNavigation();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -39,8 +41,15 @@ const GiftEggBuyScreen = memo(({ route }: Props) => {
       const res = await UserApi.postGift(data!._id, amout, user.phone);
       setPayment(res.data);
       onQpaySheet();
-    } catch (err) {
-      console.log(err, "aaaa");
+    } catch (err:any) {
+      toast.show("Алдаа", {
+        type: "error",
+        data: {
+          title: err.error.message || "Алдаа",
+        },
+        duration : 2000,
+        placement: "top",
+      });
     }
     finally {
       setLoading(false);

@@ -2,51 +2,27 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { memo, useCallback, } from "react";
 import Modal from "react-native-modal";
 import { Colors } from "../../constants/colors";
-import useSWR from "swr";
-import { IUser } from "../../interfaces/user";
 import { Image } from "expo-image";
-import { useNavigation } from "@react-navigation/native";
-import { NavigationRoutes } from "../../navigation/types";
 import { AntDesign } from "@expo/vector-icons";
 
 type Props = {
   modal: boolean;
-  user: {
+  confirm: {
     phone: string,
-    isUser: boolean
+    eggCount: number
   };
   setModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const GiftChooseModal = memo(({ modal, user, setModal }: Props) => {
-  const { data } = useSWR<IUser>("swr.user.me");
-  const navigation = useNavigation();
-
-  const onSubmitBuy = useCallback(() => {
-    setModal(false);
-    navigation.navigate(NavigationRoutes.GiftEggBuyScreen, { user });
-  }, [navigation, setModal, user]);
-
-  const onSubmitGift = useCallback(() => {
-    setModal(false);
-    navigation.navigate(NavigationRoutes.GiftEggUserScreen, { user });
-  }, [navigation, setModal, user]);
-
-  const opacity = useCallback(() => {
-    if(data?.eggCount === 0){
-
-      return{
-        opacity: 0.5
-      };
-    }
-    return {
-      opacity: 1
-    };
-  },[data?.eggCount]);
+const GiftSuccessModal = memo(({ modal, confirm, setModal }: Props) => {
 
   const modalHide = useCallback(() => {
     setModal(false);
   },[setModal]);
+
+  const onPress = useCallback(() => {
+    modalHide();
+  },[modalHide]);
 
   return (
     <View>
@@ -55,17 +31,13 @@ const GiftChooseModal = memo(({ modal, user, setModal }: Props) => {
           <TouchableOpacity onPress={() => setModal(false)} style={styles.backButton}>
             <AntDesign color={Colors.primary} name="close" size={24} />
           </TouchableOpacity>
-          <Image source={require("../../assets/img/gift-hand.png")} style={styles.iconContainer} />
-          <Text style={styles.modalTitle}>Бэлэг илгээх төрөл</Text>
-          <Text style={styles.modalDescription}>Та өөрийн хайртай дотнын хүндээ өөрт байгаа өндөг эсвэл худалдаж аван илгээх боломжтой.</Text>
+          <Image source={require("../../assets/img/congratz.png")} style={styles.iconContainer} />
+          <Text style={styles.modalTitle}>Бэлэг амжилттай илгээгдсэн</Text>
+          <Text style={styles.modalDescription}>{confirm.phone} дугаартай хэрэглэгчид {confirm.eggCount} өндөг илгээгдлээ </Text>
           <View style={styles.h15} />
           <View style={styles.h15} />
-          <TouchableOpacity disabled={data?.eggCount === 0} onPress={onSubmitGift} style={[styles.giftButton, opacity()]}>
-            <Text style={styles.giftTilte}>Өөрт байгаа өндөгнөөс илгээх </Text>
-            <Text style={styles.giftTilte}>({data?.eggCount === 0 ? "Танд өндөг байхгүй байна" : `${data?.eggCount} өндөг`})</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onSubmitBuy} style={styles.giftButton}>
-            <Text style={styles.giftTilte}>Худалдан авч илгээх</Text>
+          <TouchableOpacity onPress={onPress} style={styles.giftButton}>
+            <Text style={styles.giftTilte}>Нүүр хуудас буцах</Text>
           </TouchableOpacity>
           <View style={styles.h15} />
           <View style={styles.h15} />
@@ -75,9 +47,9 @@ const GiftChooseModal = memo(({ modal, user, setModal }: Props) => {
   );
 });
 
-GiftChooseModal.displayName = "GiftChooseModal";
+GiftSuccessModal.displayName = "GiftSuccessModal";
 
-export { GiftChooseModal };
+export { GiftSuccessModal };
 
 const styles = StyleSheet.create({
   modal: {

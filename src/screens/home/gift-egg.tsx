@@ -8,6 +8,7 @@ import { BackAppBar } from "../../components/header/back-app-bar";
 import { Colors } from "../../constants/colors";
 import { GiftChooseModal } from "../../components/modal/gift-choose-modal";
 import { UserApi } from "../../api";
+import { useToast } from "react-native-toast-notifications";
 
 const width = Dimensions.get("window").width;
 
@@ -17,6 +18,7 @@ type GiftPhone = {
 
 const GiftEggScreen = memo(() => {
   const animate = useRef(null);
+  const toast = useToast();
   const [modal, setModal] = useState(false);
   const [user, setUser] = useState({
     phone : "",
@@ -34,11 +36,16 @@ const GiftEggScreen = memo(() => {
         phone : phone,
         isUser: user.status
       });
-      console.log(user);
-
       setModal(true);
-    } catch(err){
-      console.log(err);
+    } catch(err:any){
+      toast.show("Алдаа", {
+        type: "error",
+        data: {
+          title: err.error.message || "Алдаа",
+        },
+        duration : 2000,
+        placement: "top",
+      });
     }
   };
 

@@ -47,7 +47,7 @@ const PinCodeRegisterScreen = memo(({ route }: Props) => {
     sv.value = withRepeat(withTiming(1, { duration }), -1);
     const createPassword = code.join("");
     if(password !== createPassword){
-      return toast.show("Нууц үг таарахгүй байна", {
+       toast.show("Нууц үг таарахгүй байна", {
         type: "error",
         data: {
           title: "Нууц үг таарахгүй байна"
@@ -55,6 +55,8 @@ const PinCodeRegisterScreen = memo(({ route }: Props) => {
         duration : 2000,
         placement: "top"
       });
+      setCode([]);
+      return;
     }
     try {
       const res = await AuthApi.checkRegisterPassword(password);

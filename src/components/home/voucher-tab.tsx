@@ -1,11 +1,11 @@
-import { RefreshControl,   View } from "react-native";
+import { RefreshControl,   StyleSheet,   View } from "react-native";
 import React, { memo, useCallback } from "react";
 import useSWRInfinite from "swr/infinite";
 import { GiftApi } from "../../api";
 import { IGift } from "../../interfaces/gift";
 import { GiftCard } from "../../components/home/gift";
 import { Tabs } from "react-native-collapsible-tab-view";
-import { Loader } from "../common/loader";
+import { Loading } from "../common/loading";
 
 const VoucherTab = memo(() => {
   const { data, size, setSize, isLoading } = useSWRInfinite(
@@ -36,9 +36,13 @@ const VoucherTab = memo(() => {
 
   const renderEmpty = useCallback(() => {
     if(isLoading){
-      <Loader/>;
+     return (
+       <View style={styles.loader}>
+         <Loading/>
+       </View>
+     );
     }
-    return<></>;
+    return <></>;
   },[isLoading]);
 
   return (
@@ -70,3 +74,11 @@ const VoucherTab = memo(() => {
 VoucherTab.displayName = "VoucherTab";
 
 export { VoucherTab };
+
+const styles = StyleSheet.create({
+  loader: {
+    flex          : 1,
+    alignItems    : "center",
+    justifyContent: "center"
+  }
+});

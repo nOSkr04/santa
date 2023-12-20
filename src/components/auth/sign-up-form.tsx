@@ -5,9 +5,9 @@ import { Colors } from "../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutes } from "../../navigation/types";
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
-import { SingleLoader } from "../common/solo-loader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { Loading } from "../common/loading";
 const width = Dimensions.get("window").width;
 
 export type ISignUpForm = {
@@ -94,7 +94,7 @@ const SignUpForm = memo(({ control, errors, onSubmit, loading }: Props) => {
         <View style={styles.h32} />
         <Animated.View style={animatedStyle}>
           <TouchableOpacity disabled={loading} onPress={onSubmit} style={styles.button}>
-            {loading ? <SingleLoader /> : <Text style={styles.buttonLabel}>Бүртгүүлэх</Text>}
+            {loading ? <Loading height={18} width={18} /> : <Text style={styles.buttonLabel}>Бүртгүүлэх</Text>}
           </TouchableOpacity>
         </Animated.View>
         <View style={styles.h24} />

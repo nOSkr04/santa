@@ -1,46 +1,59 @@
-import { ActivityIndicator, Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {  Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { memo, useCallback,  useRef, useState } from "react";
 import { BackAppBar } from "../../components/header/back-app-bar";
 import { Colors } from "../../constants/colors";
 import { Image } from "expo-image";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { useNavigation } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavigationRoutes, RootStackParamList } from "../../navigation/types";
 import { UserApi } from "../../api";
 import useSWR from "swr";
 import { IUser } from "../../interfaces/user";
+import { Loading } from "../../components/common/loading";
+import { GiftSuccessModal } from "../../components/modal/gift-success.modal";
+import { useToast } from "react-native-toast-notifications";
 const width = Dimensions.get("window").width;
 
 type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.GiftEggUserScreen>;
 
 const GiftEggUserScreen = memo(({ route }: Props) => {
   const { user } = route.params;
+  const toast = useToast();
   const animate = useRef(null);
-  const navigation = useNavigation();
   const [egg, setEgg] = useState("1");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [modal,setModal] = useState(false);
   const intEgg = parseInt(egg, 10);
   const { data }=  useSWR<IUser>("swr.user.me");
+  const [confirm, setConfirm] = useState({
+    eggCount: 0,
+    phone   : "string"
+  });
 
   const onPress = async () => {
     setLoading(true);
     try {
       await UserApi.giftUserEgg({ phone: user.phone, egg: intEgg, message: message });
-      goBack();
-    } catch (err) {
-      console.log(err, "aaaa");
+      setConfirm({
+        eggCount: intEgg,
+        phone   : user.phone
+      });
+    } catch (err:any) {
+      toast.show("Алдаа", {
+        type: "error",
+        data: {
+          title: err.error.message || "Алдаа",
+        },
+        duration : 2000,
+        placement: "top",
+      });
     }
     finally {
       setLoading(false);
     }
   };
-
-  const goBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
 
   const minusEgg = useCallback(() => {
     const eggInt = parseInt(egg, 10);
@@ -77,29 +90,32 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
       <View style={styles.divider} />
 
       {loading ?
-        <ActivityIndicator />
+        <View style={styles.loading}>
+          <Loading title />
+        </View>
         :
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.root}>
-          <ScrollView contentContainerStyle={styles.container}>
-            <LottieView
+        <>
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.root}>
+            <ScrollView contentContainerStyle={styles.container}>
+              <LottieView
               autoPlay
               ref={animate}
               source={require("../../assets/lottie/snow-animate.json")}
               style={styles.root}
             />
 
-            <View style={styles.shadowImage}>
-              <Image contentFit="contain" source={require("../../assets/img/gift.png")} style={styles.image} />
-            </View>
-            <View style={styles.contentContainer}>
-              <Text style={styles.description}>{user.phone} - дугаартай хэрэглэгчэд өндөг бэлэглэх</Text>
-              <Text style={styles.eggTitle}>{egg} өндөг = {(intEgg * 20000 || 0).toLocaleString()} ₮</Text>
-              <View style={styles.eggContainer}>
-                <TouchableOpacity onPress={minusEgg} style={styles.sumButton}>
-                  <AntDesign color={Colors.white} name="minus" size={24} />
-                </TouchableOpacity>
+              <View style={styles.shadowImage}>
+                <Image contentFit="contain" source={require("../../assets/img/gift.png")} style={styles.image} />
+              </View>
+              <View style={styles.contentContainer}>
+                <Text style={styles.description}>{user.phone} - дугаартай хэрэглэгчэд өндөг бэлэглэх</Text>
+                <Text style={styles.eggTitle}>{egg} өндөг = {(intEgg * 20000 || 0).toLocaleString()} ₮</Text>
+                <View style={styles.eggContainer}>
+                  <TouchableOpacity onPress={minusEgg} style={styles.sumButton}>
+                    <AntDesign color={Colors.white} name="minus" size={24} />
+                  </TouchableOpacity>
 
-                <TextInput
+                  <TextInput
                   cursorColor={Colors.white}
                   keyboardType="numeric"
                   onChangeText={setEgg}
@@ -108,12 +124,12 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
                   style={styles.input}
                   value={egg.toString()}
                 />
-                <TouchableOpacity onPress={plusEgg} style={styles.sumButton}>
-                  <AntDesign color={Colors.white} name="plus" size={24} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.messageLabel}>Хэлэх үг</Text>
-              <TextInput
+                  <TouchableOpacity onPress={plusEgg} style={styles.sumButton}>
+                    <AntDesign color={Colors.white} name="plus" size={24} />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.messageLabel}>Хэлэх үг</Text>
+                <TextInput
                   cursorColor={Colors.white}
                   onChangeText={setMessage}
                   placeholder="Хэлэх үг"
@@ -121,25 +137,27 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
                   style={styles.messageInput}
                   value={message}
                 />
-              <View style={styles.buttonRow}>
-                <TouchableOpacity onPress={() => setPlusButton("7")} style={styles.rowButton}>
-                  <Text style={styles.rowButtonTitle}>7 ширхэг</Text>
+                <View style={styles.buttonRow}>
+                  <TouchableOpacity onPress={() => setPlusButton("7")} style={styles.rowButton}>
+                    <Text style={styles.rowButtonTitle}>7 ширхэг</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setPlusButton("27")} style={styles.rowButton}>
+                    <Text style={styles.rowButtonTitle}>27 ширхэг</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setPlusButton("247")} style={styles.rowButton}>
+                    <Text style={styles.rowButtonTitle}>247 ширхэг</Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity onPress={onPress} style={styles.submit}>
+                  <Text style={styles.primaryButton}>Илгээх</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setPlusButton("27")} style={styles.rowButton}>
-                  <Text style={styles.rowButtonTitle}>27 ширхэг</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setPlusButton("247")} style={styles.rowButton}>
-                  <Text style={styles.rowButtonTitle}>247 ширхэг</Text>
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity onPress={onPress} style={styles.submit}>
-                <Text style={styles.primaryButton}>Илгээх</Text>
-              </TouchableOpacity>
-              <View style={styles.h32} />
+                <View style={styles.h32} />
 
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+          <GiftSuccessModal confirm={confirm} modal={modal} setModal={setModal}  />
+        </>
       }
     </>
   );
@@ -268,7 +286,11 @@ const styles = StyleSheet.create({
     marginLeft  : 24,
     marginTop   : 16,
     marginBottom: 8,
-
+  },
+  loading: {
+    backgroundColor: Colors.primary,
+    alignItems     : "center",
+    justifyContent : "center",
+    flex           : 1
   }
-
 });

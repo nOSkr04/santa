@@ -7,6 +7,8 @@ import useSWRInfinite from "swr/infinite";
 import { NotificationApi } from "../../api";
 import { INotification } from "../../interfaces/notification";
 import { NotificationCard } from "../../components/notification/notification-card";
+import { Loading } from "../../components/common/loading";
+import { EmptyCard } from "../../components/common/empty";
 
 const NotificationScreen = memo(() => {
   const { data, size, setSize, isLoading } = useSWRInfinite(
@@ -25,27 +27,45 @@ const NotificationScreen = memo(() => {
     return <NotificationCard item={item} />;
   }, []);
   const keyExtractor = useCallback((item: INotification, i: number) => `${i}-${item._id}`, []);
+
+  const renderEmpty = useCallback(() => {
+    if (isLoading) {
+      return (
+        <View style={styles.loader}>
+          <Loading title />
+        </View>
+      );
+    }
+    return (
+      <EmptyCard
+        description="Танд одоогоор мэдэгдэл ирээгүй байна"
+        title="Мэдэгдэл хоосон байна"
+      />
+    );
+  }, [isLoading]);
+
   return (
     <View style={styles.container}>
       <NotificationBackAppBar sharedTag="notifficationTitle" title="Мэдэгдэл" />
       <View style={styles.container}>
-        <FlashList 
-        ListHeaderComponent={<Text style={styles.title}>Нийт мэдэгдэл</Text>}
-        data={(data || []).map(entry => entry?.data).flat()} 
-        estimatedItemSize={100} 
-        keyExtractor={keyExtractor}
-        onEndReached={() => setSize(size + 1)}
-        onEndReachedThreshold={0.5}
-        refreshControl={
-          <RefreshControl
-            onRefresh={() => {
-              setSize(1);
-            }}
-            refreshing={isLoading}
-          />
-        }
-        renderItem={renderItem} 
-        showsVerticalScrollIndicator={false}
+        <FlashList
+          ListEmptyComponent={renderEmpty}
+          ListHeaderComponent={<Text style={styles.title}>Нийт мэдэгдэл</Text>}
+          data={(data || []).map(entry => entry?.data).flat()}
+          estimatedItemSize={100}
+          keyExtractor={keyExtractor}
+          onEndReached={() => setSize(size + 1)}
+          onEndReachedThreshold={0.5}
+          refreshControl={
+            <RefreshControl
+              onRefresh={() => {
+                setSize(1);
+              }}
+              refreshing={isLoading}
+            />
+          }
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </View>
@@ -67,5 +87,11 @@ const styles = StyleSheet.create({
     fontSize        : 20,
     fontFamily      : "MonBold",
     color           : Colors.text
+  },
+  loader: {
+    flex           : 1,
+    backgroundColor: Colors.white,
+    alignItems     : "center",
+    justifyContent : "center"
   }
 });

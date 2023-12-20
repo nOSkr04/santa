@@ -4,8 +4,8 @@ import { Control, Controller, FieldErrors } from "react-hook-form";
 import { Colors } from "../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutes } from "../../navigation/types";
-import { SingleLoader } from "../common/solo-loader";
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
+import { Loading } from "../common/loading";
 
 const width = Dimensions.get("window").width;
 
@@ -64,14 +64,14 @@ const LoginForm = memo(({ control, errors, onSubmit, loading }: Props) => {
       <View style={styles.h32} />
       <TouchableOpacity disabled={loading} onPress={onSubmit} style={styles.button}>
         <Animated.View style={animatedStyle}>
-          {loading ? <SingleLoader  /> : <Text style={styles.buttonLabel}>Нэвтрэх  </Text>}
+          {loading ?  <Loading height={18} width={18} /> : <Text style={styles.buttonLabel}>Нэвтрэх  </Text>}
         </Animated.View>
       </TouchableOpacity>
       <Text style={styles.description2}>Бүртгэлгүй бол бүртгүүлэх</Text>
     
       <TouchableOpacity disabled={loading} onPress={() => navigation.navigate(NavigationRoutes.SignUpScreen)} style={styles.button} >
         <Animated.View style={animatedStyle}>
-          {loading ? <SingleLoader  /> : <Text style={styles.buttonLabel}>Бүртгүүлэх  </Text>}
+          {loading ?  <Loading height={18} width={18} /> : <Text style={styles.buttonLabel}>Бүртгүүлэх  </Text>}
         </Animated.View>
       </TouchableOpacity>
       <View style={styles.h24} />

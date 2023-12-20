@@ -8,6 +8,7 @@ import { Tabs } from "react-native-collapsible-tab-view";
 import { Colors } from "../../constants/colors";
 import { FadeOutDown, ZoomInEasyDown } from "react-native-reanimated";
 import { Stagger } from "../animate/stagger-animate";
+import { Loading } from "../common/loading";
 
 const GiftTab = memo(() => {
   const { data, size, setSize, isLoading } = useSWRInfinite(
@@ -44,8 +45,20 @@ const GiftTab = memo(() => {
     );
   }, []);
 
+  const renderEmpty = useCallback(() => {
+    if(isLoading){
+     return (
+       <View style={styles.loader}>
+         <Loading/>
+       </View>
+     );
+    }
+    return <></>;
+  },[isLoading]);
+
   return (
     <Tabs.FlashList
+        ListEmptyComponent={renderEmpty}
         contentContainerStyle={styles.container}
         data={(data || []).map(entry => entry?.data).flat() as IGift[]}
         estimatedItemSize={250}
@@ -78,5 +91,10 @@ export { GiftTab };
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white
+  },
+  loader: {
+    flex          : 1,
+    alignItems    : "center",
+    justifyContent: "center"
   }
 });

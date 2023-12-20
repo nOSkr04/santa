@@ -26,7 +26,7 @@ const AppBar = ({ openDrawer }: { openDrawer: () => void }) => {
         <View style={[top(), styles.container]}>
           <TouchableOpacity onPress={onPress} style={styles.button}>
             <AntDesign color={Colors.white} name="menuunfold" size={24} />
-            {data?.notificationCount !== 0 &&
+            {data?.notificationCount >= 0 &&
               <View style={styles.badgeContainer}>
                 <Text style={styles.badge}>{data?.notificationCount > 9 ? "9+"  : data?.notificationCount}</Text>
               </View>
