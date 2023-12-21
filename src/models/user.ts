@@ -34,6 +34,18 @@ export class User implements IUser {
     return this;
   }
 
+  setEggMinus(mutate:ScopedMutator, egg:number){
+    this.eggCount = this.eggCount - egg;
+    mutate("swr.user.me", User.fromJson(this), { revalidate: false });
+    return this;
+  }
+
+  setEggSum(mutate:ScopedMutator, egg:number){
+    this.eggCount = this.eggCount + egg;
+    mutate("swr.user.me", User.fromJson(this), { revalidate: false });
+    return this;
+  }
+
   static fromJson(json: IUser) {
     return new User(json);
   }

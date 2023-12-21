@@ -1,11 +1,9 @@
 import { Dimensions, StyleSheet, Text, View } from "react-native";
-import React, { memo, useCallback, useRef } from "react";
-import LottieView from "lottie-react-native";
+import React, { memo, useCallback,  } from "react";
 import { ToastProps } from "react-native-toast-notifications/lib/typescript/toast";
 import { Colors } from "../../constants/colors";
 const width = Dimensions.get("window").width;
 const ErrorToast = memo(({ toast }: {toast:ToastProps}) => {
-  const animation = useRef(null);
 
   const background = useCallback(() => {
     return{
@@ -21,12 +19,6 @@ const ErrorToast = memo(({ toast }: {toast:ToastProps}) => {
 
   return (
     <View style={[styles.root,background()]}>
-      <LottieView
-        autoPlay
-        ref={animation}
-        source={require("../../assets/lottie/error.json")}
-        style={styles.lottie}
-      />
       <Text style={[styles.errorTitle,text()]}>{toast.data?.title}</Text>
     </View>
   );

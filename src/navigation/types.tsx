@@ -32,11 +32,11 @@ export type RootStackParamList = {
   BuyEggScreen: {sideBar?: boolean}
   NotificationScreen: undefined
   GiftEggScreen: undefined
-  GiftEggBuyScreen: {user: {
+  GiftEggBuyScreen: {detail: {
     phone: string,
     isUser: boolean
   }}
-  GiftEggUserScreen: {user: {
+  GiftEggUserScreen: {detail: {
     phone: string,
     isUser: boolean
   }}

@@ -41,7 +41,6 @@ const LoginScreen = memo(() => {
       setLoading(false);
     }
   };
-  console.log(loading);
   return (
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.root}>
       <Image contentFit="cover" placeholder={"L93KNit:L#MIXUbIjEj[L}Vqt.tl"} source={"https://evseg.s3.ap-southeast-1.amazonaws.com/97c18868-7e22-40ba-97f7-7340afedf26e.jpg"} style={styles.bgImage} />

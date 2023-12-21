@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { UserApi } from "../../api";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { Banks } from "../home/banks";
@@ -29,6 +29,8 @@ const QpaySheet = memo(({ payment, egg, closeBottomSheet, goBack }: Props) => {
         return res;
     });
 
+    const { mutate } = useSWRConfig();
+
     const renderItem = useCallback(({ item }: { item: IBank }) => {
         return <Banks item={item} />;
     }, []);
@@ -37,9 +39,10 @@ const QpaySheet = memo(({ payment, egg, closeBottomSheet, goBack }: Props) => {
         if (check?.success) {
             goBack();
             closeBottomSheet();
+            mutate("swr.user.me");
             return;
         }
-    }, [check?.success, closeBottomSheet, goBack]);
+    }, [check?.success, closeBottomSheet, goBack, mutate]);
 
     return (
       <>
@@ -47,7 +50,7 @@ const QpaySheet = memo(({ payment, egg, closeBottomSheet, goBack }: Props) => {
           <TouchableOpacity onPress={closeBottomSheet} style={styles.backButton}>
             <AntDesign color={Colors.black} name="left" size={24} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{(egg * 100).toLocaleString()} ₮</Text>
+          <Text style={styles.headerTitle}>{(egg * 20000).toLocaleString()} ₮</Text>
           <TouchableOpacity style={styles.backButton}>
             <AntDesign color={Colors.white} name="retweet" size={24} />
           </TouchableOpacity>

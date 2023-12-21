@@ -8,18 +8,20 @@ import LottieView from "lottie-react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavigationRoutes, RootStackParamList } from "../../navigation/types";
 import { UserApi } from "../../api";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { IUser } from "../../interfaces/user";
 import { Loading } from "../../components/common/loading";
 import { GiftSuccessModal } from "../../components/modal/gift-success.modal";
 import { useToast } from "react-native-toast-notifications";
+import { User } from "../../models/user";
 const width = Dimensions.get("window").width;
 
 type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.GiftEggUserScreen>;
 
 const GiftEggUserScreen = memo(({ route }: Props) => {
-  const { user } = route.params;
+  const { detail } = route.params;
   const toast = useToast();
+  const { mutate } = useSWRConfig();
   const animate = useRef(null);
   const [egg, setEgg] = useState("1");
   const [message, setMessage] = useState("");
@@ -35,11 +37,14 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
   const onPress = async () => {
     setLoading(true);
     try {
-      await UserApi.giftUserEgg({ phone: user.phone, egg: intEgg, message: message });
+      await UserApi.giftUserEgg({ phone: detail.phone, egg: intEgg, message: message });
+      const _user = User.fromJson(data!);
+      _user.setEggMinus(mutate, intEgg);
       setConfirm({
         eggCount: intEgg,
-        phone   : user.phone
+        phone   : detail.phone
       });
+      setModal(true);
     } catch (err:any) {
       toast.show("Алдаа", {
         type: "error",
@@ -108,7 +113,7 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
                 <Image contentFit="contain" source={require("../../assets/img/gift.png")} style={styles.image} />
               </View>
               <View style={styles.contentContainer}>
-                <Text style={styles.description}>{user.phone} - дугаартай хэрэглэгчэд өндөг бэлэглэх</Text>
+                <Text style={styles.description}>{detail.phone} - дугаартай хэрэглэгчэд өндөг бэлэглэх</Text>
                 <Text style={styles.eggTitle}>{egg} өндөг = {(intEgg * 20000 || 0).toLocaleString()} ₮</Text>
                 <View style={styles.eggContainer}>
                   <TouchableOpacity onPress={minusEgg} style={styles.sumButton}>

@@ -20,7 +20,7 @@ const GiftEggScreen = memo(() => {
   const animate = useRef(null);
   const toast = useToast();
   const [modal, setModal] = useState(false);
-  const [user, setUser] = useState({
+  const [detail, setDetail] = useState({
     phone : "",
     isUser: false,
   });
@@ -32,7 +32,7 @@ const GiftEggScreen = memo(() => {
     const phone = data.phone;
     try{
       const user = await UserApi.findUser(phone);
-      setUser({
+      setDetail({
         phone : phone,
         isUser: user.status
       });
@@ -93,7 +93,7 @@ const GiftEggScreen = memo(() => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-      <GiftChooseModal modal={modal}  setModal={setModal}  user={user} />
+      <GiftChooseModal detail={detail}  modal={modal}  setModal={setModal} />
     </>
   );
 });

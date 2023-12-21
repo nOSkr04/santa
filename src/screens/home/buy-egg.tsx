@@ -33,7 +33,7 @@ const BuyEggScreen = memo(({ route }: Props) => {
 
   const onPress = async () => {
     setLoading(true);
-    const amout = intEgg * 100;
+    const amout = intEgg * 20000;
     try {
       const res = await UserApi.postInvoice(data!._id, amout);
       setPayment(res.data);

@@ -21,7 +21,7 @@ const width = Dimensions.get("window").width;
 type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.GiftEggBuyScreen>;
 
 const GiftEggBuyScreen = memo(({ route }: Props) => {
-  const { user } = route.params;
+  const { detail } = route.params;
   const animate = useRef(null);
   const toast = useToast();
   const { data } = useSWR<IUser>("swr.user.me");
@@ -36,9 +36,9 @@ const GiftEggBuyScreen = memo(({ route }: Props) => {
 
   const onPress = async () => {
     setLoading(true);
-    const amout = intEgg * 100;
+    const amout = intEgg * 20000;
     try {
-      const res = await UserApi.postGift(data!._id, amout, user.phone);
+      const res = await UserApi.postGift(data!._id, amout, detail.phone);
       setPayment(res.data);
       onQpaySheet();
     } catch (err:any) {
@@ -170,7 +170,7 @@ const GiftEggBuyScreen = memo(({ route }: Props) => {
           ref={bottomSheetModalRef}
           snapPoints={snapPoints}
         >
-          <GiftQpaySheet closeBottomSheet={closeBottomSheet} egg={intEgg} goBack={goBack} payment={payment} phone={user.phone} />
+          <GiftQpaySheet closeBottomSheet={closeBottomSheet} egg={intEgg} goBack={goBack} payment={payment} phone={detail.phone} />
         </BottomSheetModal>
       }
     </>

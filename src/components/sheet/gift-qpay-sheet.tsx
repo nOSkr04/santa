@@ -48,7 +48,7 @@ const GiftQpaySheet = memo(({ payment, egg, closeBottomSheet, goBack,phone }: Pr
           <TouchableOpacity onPress={closeBottomSheet} style={styles.backButton}>
             <AntDesign color={Colors.black} name="left" size={24} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{(egg * 100).toLocaleString()} ₮</Text>
+          <Text style={styles.headerTitle}>{(egg * 20000).toLocaleString()} ₮</Text>
           <TouchableOpacity style={styles.backButton}>
             <AntDesign color={Colors.white} name="retweet" size={24} />
           </TouchableOpacity>

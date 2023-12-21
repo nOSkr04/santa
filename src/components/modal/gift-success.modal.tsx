@@ -4,6 +4,8 @@ import Modal from "react-native-modal";
 import { Colors } from "../../constants/colors";
 import { Image } from "expo-image";
 import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationRoutes } from "../../navigation/types";
 
 type Props = {
   modal: boolean;
@@ -16,13 +18,15 @@ type Props = {
 
 const GiftSuccessModal = memo(({ modal, confirm, setModal }: Props) => {
 
+  const navigaiton = useNavigation();
   const modalHide = useCallback(() => {
     setModal(false);
   },[setModal]);
 
   const onPress = useCallback(() => {
     modalHide();
-  },[modalHide]);
+    navigaiton.navigate(NavigationRoutes.GiftEggScreen);
+  },[modalHide, navigaiton]);
 
   return (
     <View>
@@ -31,7 +35,7 @@ const GiftSuccessModal = memo(({ modal, confirm, setModal }: Props) => {
           <TouchableOpacity onPress={() => setModal(false)} style={styles.backButton}>
             <AntDesign color={Colors.primary} name="close" size={24} />
           </TouchableOpacity>
-          <Image source={require("../../assets/img/congratz.png")} style={styles.iconContainer} />
+          <Image contentFit="contain" source={require("../../assets/img/congratz.png")} style={styles.iconContainer} />
           <Text style={styles.modalTitle}>Бэлэг амжилттай илгээгдсэн</Text>
           <Text style={styles.modalDescription}>{confirm.phone} дугаартай хэрэглэгчид {confirm.eggCount} өндөг илгээгдлээ </Text>
           <View style={styles.h15} />
@@ -60,7 +64,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     marginTop: 35,
     width    : 100,
-    height   : 100,
+    height   : 150,
     alignSelf: "center"
   },
   modalTitle: {

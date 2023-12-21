@@ -11,26 +11,26 @@ import { AntDesign } from "@expo/vector-icons";
 
 type Props = {
   modal: boolean;
-  user: {
+  detail: {
     phone: string,
     isUser: boolean
   };
   setModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const GiftChooseModal = memo(({ modal, user, setModal }: Props) => {
+const GiftChooseModal = memo(({ modal, detail, setModal }: Props) => {
   const { data } = useSWR<IUser>("swr.user.me");
   const navigation = useNavigation();
 
   const onSubmitBuy = useCallback(() => {
     setModal(false);
-    navigation.navigate(NavigationRoutes.GiftEggBuyScreen, { user });
-  }, [navigation, setModal, user]);
+    navigation.navigate(NavigationRoutes.GiftEggBuyScreen, { detail });
+  }, [navigation, setModal, detail]);
 
   const onSubmitGift = useCallback(() => {
     setModal(false);
-    navigation.navigate(NavigationRoutes.GiftEggUserScreen, { user });
-  }, [navigation, setModal, user]);
+    navigation.navigate(NavigationRoutes.GiftEggUserScreen, { detail });
+  }, [navigation, setModal, detail]);
 
   const opacity = useCallback(() => {
     if(data?.eggCount === 0){
