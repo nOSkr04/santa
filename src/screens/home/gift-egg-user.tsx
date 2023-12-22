@@ -1,9 +1,8 @@
-import {  Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import React, { memo, useCallback,  useRef, useState } from "react";
+import {  Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet,  View } from "react-native";
+import React, { memo,   useRef, useState } from "react";
 import { BackAppBar } from "../../components/header/back-app-bar";
 import { Colors } from "../../constants/colors";
 import { Image } from "expo-image";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import LottieView from "lottie-react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavigationRoutes, RootStackParamList } from "../../navigation/types";
@@ -14,34 +13,41 @@ import { Loading } from "../../components/common/loading";
 import { GiftSuccessModal } from "../../components/modal/gift-success.modal";
 import { useToast } from "react-native-toast-notifications";
 import { User } from "../../models/user";
+import {  useForm } from "react-hook-form";
+import { EggForm, UserEggForm } from "../../components/form/egg-form";
 const width = Dimensions.get("window").width;
 
 type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.GiftEggUserScreen>;
 
+
+
 const GiftEggUserScreen = memo(({ route }: Props) => {
+  const { handleSubmit, control, formState: { errors },  watch, setValue } = useForm<UserEggForm>({
+    defaultValues: {
+      egg    : 1,
+      message: ""
+    }
+  });
   const { detail } = route.params;
   const toast = useToast();
   const { mutate } = useSWRConfig();
   const animate = useRef(null);
-  const [egg, setEgg] = useState("1");
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [modal,setModal] = useState(false);
-  const intEgg = parseInt(egg, 10);
-  const { data }=  useSWR<IUser>("swr.user.me");
+  const { data: user }=  useSWR<IUser>("swr.user.me");
   const [confirm, setConfirm] = useState({
     eggCount: 0,
     phone   : "string"
   });
 
-  const onPress = async () => {
+  const onPress = async (data: UserEggForm) => {
     setLoading(true);
     try {
-      await UserApi.giftUserEgg({ phone: detail.phone, egg: intEgg, message: message });
-      const _user = User.fromJson(data!);
-      _user.setEggMinus(mutate, intEgg);
+      await UserApi.giftUserEgg({ phone: detail.phone, egg: data.egg, message: data.message });
+      const _user = User.fromJson(user!);
+      _user.setEggMinus(mutate, data.egg);
       setConfirm({
-        eggCount: intEgg,
+        eggCount: data.egg,
         phone   : detail.phone
       });
       setModal(true);
@@ -59,35 +65,6 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
       setLoading(false);
     }
   };
-
-  const minusEgg = useCallback(() => {
-    const eggInt = parseInt(egg, 10);
-    if(eggInt <= 1){
-      return;
-    }
-    setEgg(`${eggInt - 1}`);
-  }, [egg]);
-  const plusEgg = useCallback(() => {
-    const eggInt = parseInt(egg, 10);
-  if((data?.eggCount || 0) < eggInt){
-    return;
-  }
-    setEgg(`${eggInt + 1}`);
-  }, [data?.eggCount, egg]);
-
-  const setPlusButton = useCallback((plusEggs: string) => {
-    const eggInt = parseInt(egg, 10);
-  if((data?.eggCount || 0) < eggInt){
-    return setEgg(`${data?.eggCount}`);
-  }
-    const plusEgg = parseInt(plusEggs, 10);
-    if(!egg || egg === "NaN"){
-      setEgg(`${plusEggs}`);
-      return; 
-    }
-    const sumEgg = eggInt + plusEgg;
-    setEgg(`${sumEgg}`);
-  },[data?.eggCount, egg]);
 
   return (
     <>
@@ -112,53 +89,7 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
               <View style={styles.shadowImage}>
                 <Image contentFit="contain" source={require("../../assets/img/gift.png")} style={styles.image} />
               </View>
-              <View style={styles.contentContainer}>
-                <Text style={styles.description}>{detail.phone} - дугаартай хэрэглэгчэд өндөг бэлэглэх</Text>
-                <Text style={styles.eggTitle}>{egg} өндөг = {(intEgg * 20000 || 0).toLocaleString()} ₮</Text>
-                <View style={styles.eggContainer}>
-                  <TouchableOpacity onPress={minusEgg} style={styles.sumButton}>
-                    <AntDesign color={Colors.white} name="minus" size={24} />
-                  </TouchableOpacity>
-
-                  <TextInput
-                  cursorColor={Colors.white}
-                  keyboardType="numeric"
-                  onChangeText={setEgg}
-                  placeholder="Өндөг"
-                  placeholderTextColor={Colors.white40}
-                  style={styles.input}
-                  value={egg.toString()}
-                />
-                  <TouchableOpacity onPress={plusEgg} style={styles.sumButton}>
-                    <AntDesign color={Colors.white} name="plus" size={24} />
-                  </TouchableOpacity>
-                </View>
-                <Text style={styles.messageLabel}>Хэлэх үг</Text>
-                <TextInput
-                  cursorColor={Colors.white}
-                  onChangeText={setMessage}
-                  placeholder="Хэлэх үг"
-                  placeholderTextColor={Colors.white40}
-                  style={styles.messageInput}
-                  value={message}
-                />
-                <View style={styles.buttonRow}>
-                  <TouchableOpacity onPress={() => setPlusButton("7")} style={styles.rowButton}>
-                    <Text style={styles.rowButtonTitle}>7 ширхэг</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setPlusButton("27")} style={styles.rowButton}>
-                    <Text style={styles.rowButtonTitle}>27 ширхэг</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setPlusButton("247")} style={styles.rowButton}>
-                    <Text style={styles.rowButtonTitle}>247 ширхэг</Text>
-                  </TouchableOpacity>
-                </View>
-                <TouchableOpacity onPress={onPress} style={styles.submit}>
-                  <Text style={styles.primaryButton}>Илгээх</Text>
-                </TouchableOpacity>
-                <View style={styles.h32} />
-
-              </View>
+              <EggForm control={control} detail={detail} errors={errors} onSubmit={handleSubmit(onPress)} setValue={setValue} user={user!} watch={watch} />
             </ScrollView>
           </KeyboardAvoidingView>
           <GiftSuccessModal confirm={confirm} modal={modal} setModal={setModal}  />
@@ -195,64 +126,6 @@ const styles = StyleSheet.create({
     width,
     paddingVertical: 40,
   },
-  eggTitle: {
-    color         : Colors.black,
-    fontFamily    : "MonBold",
-    fontSize      : 20,
-    textAlign     : "center",
-    marginVertical: 20
-  },
-  eggContainer: {
-    flexDirection   : "row",
-    alignItems      : "center",
-    justifyContent  : "space-between",
-    marginHorizontal: 30
-  },
-  sumButton: {
-    padding        : 8,
-    backgroundColor: Colors.primary,
-    borderRadius   : 8
-  },
-  input: {
-    backgroundColor: Colors.primary,
-    padding        : 12,
-    borderRadius   : 8,
-    width          : width / 2.2,
-    color          : Colors.white,
-    textAlign      : "center"
-  },
-  buttonRow: {
-    flexDirection : "row",
-    justifyContent: "space-around",
-    alignItems    : "center",
-    marginTop     : 28
-  },
-  rowButton: {
-    borderRadius   : 8,
-    padding        : 8,
-    backgroundColor: Colors.white,
-    borderWidth    : 1,
-    borderColor    : Colors.black
-  },
-  rowButtonTitle: {
-    fontSize  : 14,
-    fontFamily: "MonSemiBold",
-    color     : Colors.black,
-
-  },
-  submit: {
-    borderRadius     : 8,
-    padding          : 12,
-    backgroundColor  : Colors.primary,
-    alignSelf        : "flex-end",
-    marginRight      : 15,
-    marginTop        : 50,
-    paddingHorizontal: 40,
-    right            : 10
-  },
-  h32: {
-    height: 32
-  },
   shadowImage: {
     shadowColor : Colors.white,
     shadowOffset: {
@@ -264,34 +137,7 @@ const styles = StyleSheet.create({
 
     elevation: 24,
   },
-  primaryButton: {
-    fontSize  : 14,
-    fontFamily: "MonSemiBold",
-    color     : Colors.white,
-  },
-  description: {
-    fontFamily: "MonMedium",
-    fontSize  : 12,
-    color     : Colors.text2,
-    textAlign : "center"
-  },
-  messageInput: {
-    backgroundColor: Colors.primary,
-    padding        : 12,
-    borderRadius   : 8,
-    width          : width - 56 ,
-    color          : Colors.white,
-    textAlign      : "center",
-    alignSelf      : "center"
-  },
-  messageLabel: {
-    fontFamily  : "MonMedium",
-    fontSize    : 12,
-    color       : Colors.text2,
-    marginLeft  : 24,
-    marginTop   : 16,
-    marginBottom: 8,
-  },
+  
   loading: {
     backgroundColor: Colors.primary,
     alignItems     : "center",
