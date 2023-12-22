@@ -14,18 +14,11 @@ import { Loading } from "../../components/common/loading";
 import { GiftSuccessModal } from "../../components/modal/gift-success.modal";
 import { useToast } from "react-native-toast-notifications";
 import { User } from "../../models/user";
-import { useForm } from "react-hook-form";
 const width = Dimensions.get("window").width;
 
 type Props = NativeStackScreenProps<RootStackParamList, NavigationRoutes.GiftEggUserScreen>;
 
-type UserEggForm = {
-  egg:number,
-  message:string
-}
-
 const GiftEggUserScreen = memo(({ route }: Props) => {
-  const { handleSubmit, control, formState: { errors }, setError, watch } = useForm<UserEggForm>();
   const { detail } = route.params;
   const toast = useToast();
   const { mutate } = useSWRConfig();

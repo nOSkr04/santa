@@ -41,16 +41,16 @@ const EggForm = memo(({ onSubmit, control, errors,  watch, setValue, user, detai
     setValue("egg", egg + 1);
   }, [egg, setValue, user?.eggCount]);
 
-  const setPlusButton = useCallback((plusEggs: string) => {
+  const setPlusButton = useCallback((plusEggs: number) => {
+    console.log(user.eggCount, egg);
     if ((user?.eggCount || 0) < egg) {
       return setValue("egg", user.eggCount);
     }
-    const plusEgg = parseInt(plusEggs, 10);
     if (!egg) {
-      setValue("egg", plusEgg);
+      setValue("egg", plusEggs);
       return;
     }
-    const sumEgg = egg + plusEgg;
+    const sumEgg = egg + plusEggs;
     setValue("egg", sumEgg);
   }, [egg, setValue, user.eggCount]);
 
@@ -102,13 +102,13 @@ const EggForm = memo(({ onSubmit, control, errors,  watch, setValue, user, detai
         <Text style={styles.errorText}>{errors.message.message}</Text>
       }
       <View style={styles.buttonRow}>
-        <TouchableOpacity onPress={() => setPlusButton("7")} style={styles.rowButton}>
+        <TouchableOpacity onPress={() => setPlusButton(7)} style={styles.rowButton}>
           <Text style={styles.rowButtonTitle}>7 ширхэг</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setPlusButton("27")} style={styles.rowButton}>
+        <TouchableOpacity onPress={() => setPlusButton(27)} style={styles.rowButton}>
           <Text style={styles.rowButtonTitle}>27 ширхэг</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setPlusButton("247")} style={styles.rowButton}>
+        <TouchableOpacity onPress={() => setPlusButton(247)} style={styles.rowButton}>
           <Text style={styles.rowButtonTitle}>247 ширхэг</Text>
         </TouchableOpacity>
       </View>
