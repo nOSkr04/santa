@@ -80,13 +80,13 @@ const EggForm = memo(({ onSubmit, control,   watch, setValue, user, detail }: Pr
       </View>
       <View style={styles.buttonRow}>
         <TouchableOpacity onPress={() => setPlusButton(1)} style={styles.rowButton}>
-          <Text style={styles.rowButtonTitle}>7 ширхэг</Text>
+          <Text style={styles.rowButtonTitle}>1 ширхэг</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setPlusButton(3)} style={styles.rowButton}>
-          <Text style={styles.rowButtonTitle}>27 ширхэг</Text>
+          <Text style={styles.rowButtonTitle}>3 ширхэг</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setPlusButton(5)} style={styles.rowButton}>
-          <Text style={styles.rowButtonTitle}>247 ширхэг</Text>
+          <Text style={styles.rowButtonTitle}>5 ширхэг</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={onSubmit} style={styles.submit}>
