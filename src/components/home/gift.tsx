@@ -1,21 +1,24 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { memo,  } from "react";
 import { Image } from "expo-image";
 import { Colors } from "../../constants/colors";
 import { IGift } from "../../interfaces/gift";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationRoutes } from "../../navigation/types";
 
 const width = Dimensions.get("window").width;
 
 const GiftCard = memo(({ item }: { item: IGift }) => {
+  const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={()=> navigation.navigate(NavigationRoutes.BuyEggScreen, { sideBar: false })} style={styles.container}>
       <Image placeholder={item.image.blurHash} source={item.image.url} style={styles.image} />
       <Text style={styles.title}>{item.name}</Text>
       <View style={styles.type}>
         <Text style={styles.typeText}>{item.type}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 });
 
