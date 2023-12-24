@@ -30,6 +30,7 @@ const DrawerContent = memo(() => {
     const res = await UserApi.me();
     return res;
   });
+  
   const [modal,setModal] = useState(false);
   const top = useCallback(() => {
     return {

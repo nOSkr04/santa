@@ -27,7 +27,7 @@ const QpaySheet = memo(({ payment, egg, closeBottomSheet, goBack }: Props) => {
     const { data: check, } = useSWR(`swr.check.${payment}`, async () => {
         const res = await UserApi.checkInvoince(data?.invoiceId || "", user?._id || "");
         return res;
-    });
+    }); 
 
     const { mutate } = useSWRConfig();
 
