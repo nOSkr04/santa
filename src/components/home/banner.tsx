@@ -10,7 +10,7 @@ import { NavigationRoutes } from "../../navigation/types";
 const width = Dimensions.get("window").width;
 
 const Banner = memo(() => {
-  const targetDateTime = new Date("2023-12-31T13:00:00");
+  const targetDateTime = new Date("2024-01-01T01:00:00");
   const navigaiton = useNavigation();
   return (
     <View style={styles.container}>

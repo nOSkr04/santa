@@ -1,4 +1,4 @@
-import { Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { memo, useRef, useState, } from "react";
 import { Image } from "expo-image";
 import LottieView from "lottie-react-native";
@@ -9,6 +9,8 @@ import { Colors } from "../../constants/colors";
 import { GiftChooseModal } from "../../components/modal/gift-choose-modal";
 import { UserApi } from "../../api";
 import { useToast } from "react-native-toast-notifications";
+import useSWR from "swr";
+import { IUser } from "../../interfaces/user";
 
 const width = Dimensions.get("window").width;
 
@@ -17,6 +19,7 @@ type GiftPhone = {
 }
 
 const GiftEggScreen = memo(() => {
+  const { data: user } = useSWR<IUser>("swr.user.me");
   const animate = useRef(null);
   const toast = useToast();
   const [modal, setModal] = useState(false);
@@ -28,6 +31,9 @@ const GiftEggScreen = memo(() => {
   const { handleSubmit, control, formState: { errors } } = useForm<GiftPhone>();
 
   const onSubmit = async (data: GiftPhone) => {
+    if(data.phone === user?.phone){
+      return Alert.alert("Таны өөрийн дугаар байна");
+    }
     
     const phone = data.phone;
     try{

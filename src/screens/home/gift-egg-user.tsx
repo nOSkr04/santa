@@ -1,4 +1,4 @@
-import {  Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {   Dimensions, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { memo, useCallback,  useRef, useState } from "react";
 import { BackAppBar } from "../../components/header/back-app-bar";
 import { Colors } from "../../constants/colors";
@@ -35,6 +35,9 @@ const GiftEggUserScreen = memo(({ route }: Props) => {
   });
 
   const onPress = async () => {
+    if((data?.eggCount || 0) < intEgg){
+      return setEgg(`${data?.eggCount}`);
+    }
     setLoading(true);
     try {
       await UserApi.giftUserEgg({ phone: detail.phone, egg: intEgg, message: message });
